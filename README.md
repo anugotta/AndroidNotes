@@ -2,6 +2,8 @@
 
 ## Table of contents
 
+<span style="color:blue">some *blue* text</span>.
+
 - [Chapter 1 - Clean Code](#chapter1)
 - [Chapter 2 - Meaningful Names](#chapter2)
 - [Chapter 3 - Functions](#chapter3)
