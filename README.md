@@ -2,7 +2,7 @@
 
 ## Table of contents
 
-- [Chapter 1 - Clean Code](#chapter1)
+- [Chapter 1 - OOPs](#chapter1)
 - [Chapter 2 - Meaningful Names](#chapter2)
 - [Chapter 3 - Functions](#chapter3)
 - [Chapter 4 - Comments](#chapter4)
@@ -21,9 +21,10 @@
 - [Chapter 17 - Smells and Heuristics](#chapter17)
 
 <a name="chapter1">
-    
 
-# Interface vs Abstract Class:
+# OOPs:
+
+## Interface vs Abstract Class:
     
  In Kotlin, starting from version 1.0, interfaces can define functions with default implementations. This feature allows interfaces to provide method implementations, making them more versatile. Here are some examples:
 
