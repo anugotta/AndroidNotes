@@ -2,8 +2,6 @@
 
 ## Table of contents
 
-<span style="color:blue">some *blue* text</span>.
-
 - [Chapter 1 - Clean Code](#chapter1)
 - [Chapter 2 - Meaningful Names](#chapter2)
 - [Chapter 3 - Functions](#chapter3)
@@ -243,6 +241,58 @@ public: The least restrictive modifier. It allows access to a class, method or v
 //Kotlin modifiers , here there is no package private modifier instead it has internal.
 
 . In a simple case, a module is a set of files compiled at the same time in a given project. A set of files being compiled with a single Kotlin compiler invocation.
+    
+    
+In Kotlin, access modifiers are keywords that control the visibility and accessibility of classes, interfaces, functions, properties, and other elements within your code. There are four access modifiers available in Kotlin:
+
+1. Public (default):
+   - The public access modifier is the default modifier in Kotlin.
+   - It means that the element is visible and accessible from anywhere within the same module or project.
+   - If no access modifier is specified, the element is automatically considered public.
+
+2. Private:
+   - The private access modifier restricts the visibility of the element to the same declaration scope or enclosing class.
+   - It means that the element is only accessible within the file or the class where it is declared.
+   - Private elements cannot be accessed from outside of their declared scope, including subtypes or extensions.
+
+3. Protected:
+   - The protected access modifier allows access to the element from the same class, its subclasses, and the same file.
+   - It is similar to private, but with the addition of being accessible within subclasses.
+   - Protected elements are not visible outside of the file where they are declared, even if they are inherited by a subclass.
+
+4. Internal:
+   - The internal access modifier allows access to the element from any code within the same module.
+   - A module in Kotlin is a set of Kotlin files compiled together, such as a Gradle module or an IntelliJ IDEA module.
+   - Internal elements are not visible outside of the module boundary, meaning that they are not accessible from other modules.
+
+Here's an example to illustrate the use of access modifiers:
+
+```kotlin
+class Example {
+    private val privateProperty = 42
+    protected val protectedProperty = "Hello"
+    internal val internalProperty = listOf(1, 2, 3)
+    
+    private fun privateFunction() {
+        // Can only be accessed within the same class
+    }
+    
+    protected fun protectedFunction() {
+        // Can be accessed within the same class and subclasses
+    }
+    
+    internal fun internalFunction() {
+        // Can be accessed within the same module
+    }
+    
+    fun publicFunction() {
+        // Default access modifier is public
+        // Can be accessed from anywhere
+    }
+}
+```
+
+In the example above, `privateProperty` and `privateFunction()` are accessible only within the `Example` class. `protectedProperty` and `protectedFunction()` can also be accessed from subclasses of `Example`. `internalProperty` and `internalFunction()` are visible within the same module. Finally, `publicFunction()` has public access and can be accessed from anywhere.
 
 
 # Kotlin Vs Java
