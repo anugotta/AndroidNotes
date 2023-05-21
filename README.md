@@ -22,6 +22,53 @@
 
 <a name="chapter1">
 
+# Kotlin Runtime vs Compile time:
+    
+In Kotlin, "compile time" and "run time" are two distinct phases of a program's lifecycle. Let's explore each of these phases and provide examples to illustrate their meaning:
+
+1. Compile Time:
+   - The compile time refers to the phase when your Kotlin source code is translated into bytecode by the Kotlin compiler (such as the `kotlinc` command or the Kotlin compiler integrated in your IDE).
+   - During this phase, the compiler performs syntax and type checking, generates bytecode instructions, and ensures that your code adheres to the language rules.
+   - Compilation errors, if any, are detected and reported at this stage.
+   - Examples of compile-time operations include:
+     - Syntax validation and verification.
+     - Type checking.
+     - Generating bytecode.
+
+   Example:
+   ```kotlin
+   fun main() {
+       val name: String = "John"
+       val age: Int = "25" // Compilation error: Type mismatch
+
+       println("Name: $name, Age: $age")
+   }
+   ```
+   In this example, during the compile-time phase, the Kotlin compiler detects a type mismatch error because we are assigning a string value to an integer variable. The error is reported, and the code fails to compile.
+
+2. Run Time:
+   - The run time refers to the phase when your compiled Kotlin bytecode is executed by the Java Virtual Machine (JVM) or any other Kotlin runtime environment.
+   - During this phase, the compiled code is loaded, interpreted, and executed by the runtime environment.
+   - Any runtime errors or exceptions that occur during program execution are handled at this stage.
+   - Examples of run-time operations include:
+     - Object instantiation.
+     - Method invocation.
+     - Exception handling.
+
+   Example:
+   ```kotlin
+   fun main() {
+       val numbers = listOf(1, 2, 3)
+       val result = numbers[5] // IndexOutOfBoundsException at runtime
+
+       println("Result: $result")
+   }
+   ```
+   In this example, at runtime, the program attempts to access the element at index 5 in the `numbers` list. However, since the list contains only three elements, an `IndexOutOfBoundsException` occurs at runtime. The program execution halts, and the exception can be caught and handled if desired.
+
+Understanding the distinction between compile time and run time is essential because it helps developers identify and resolve issues before the program is executed (compile-time errors) or handle unexpected situations that may occur during program execution (run-time errors).
+
+    
 
 # Kotlin Data Class:
 
