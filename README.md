@@ -21,6 +21,100 @@
 - [Chapter 17 - Smells and Heuristics](#chapter17)
 
 <a name="chapter1">
+    
+
+# Interface vs Abstract Class:
+    
+ In Kotlin, starting from version 1.0, interfaces can define functions with default implementations. This feature allows interfaces to provide method implementations, making them more versatile. Here are some examples:
+
+```kotlin
+interface Vehicle {
+    fun start()
+    fun stop()
+
+    fun honk() { // Default implementation
+        println("Beep beep!")
+    }
+}
+
+class Car : Vehicle {
+    override fun start() {
+        println("Car started")
+    }
+
+    override fun stop() {
+        println("Car stopped")
+    }
+}
+
+class Bike : Vehicle {
+    override fun start() {
+        println("Bike started")
+    }
+
+    override fun stop() {
+        println("Bike stopped")
+    }
+
+    override fun honk() {
+        println("Ring ring!")
+    }
+}
+
+fun main() {
+    val car = Car()
+    car.start()
+    car.stop()
+    car.honk()
+
+    val bike = Bike()
+    bike.start()
+    bike.stop()
+    bike.honk()
+}
+```
+
+In the example above, we define an interface called `Vehicle` that declares three functions: `start()`, `stop()`, and `honk()`. The `start()` and `stop()` functions are abstract methods, meaning they don't provide an implementation in the interface itself. On the other hand, the `honk()` function has a default implementation that prints "Beep beep!".
+
+The `Car` class implements the `Vehicle` interface and provides specific implementations for `start()` and `stop()`. It inherits the default implementation of `honk()`.
+
+The `Bike` class also implements the `Vehicle` interface but overrides the `honk()` function with its own implementation that prints "Ring ring!".
+
+In the `main()` function, we create instances of `Car` and `Bike` and invoke the `start()`, `stop()`, and `honk()` functions on them. The output would be:
+
+```
+Car started
+Car stopped
+Beep beep!
+Bike started
+Bike stopped
+Ring ring!
+```
+
+As shown in this example, interfaces in Kotlin can have both abstract and default methods, allowing for flexible implementation and providing default behavior for common functions.
+    
+    
+    
+Interfaces with default method implementations in Kotlin share some similarities with abstract classes, but there are important differences between them:
+
+1. Multiple Inheritance:
+   - In Kotlin, a class can implement multiple interfaces, but it can only inherit from a single abstract class.
+   - This means that interfaces with default implementations provide a way to achieve multiple inheritance of behavior, while abstract classes do not.
+
+2. Constructor Involvement:
+   - Abstract classes can have constructors, including primary and secondary constructors.
+   - Interfaces cannot have constructors because they are not allowed to maintain state.
+   - However, interfaces can have property declarations, which abstract classes can also have.
+
+3. Open/Closed Principle:
+   - Abstract classes are designed to be subclassed and extended. They provide a base implementation that subclasses can inherit and override.
+   - Interfaces, on the other hand, are designed to define contracts that classes can implement. They do not provide an implementation themselves.
+   - By allowing default method implementations, interfaces in Kotlin can introduce additional behavior to implementers without breaking the open/closed principle. Subclasses of abstract classes, however, are required to provide their own implementations for abstract methods.
+
+In summary, interfaces with default method implementations in Kotlin offer a way to define contracts with default behavior that can be implemented by multiple classes. They enable multiple inheritance of behavior and allow for greater flexibility in designing class hierarchies. Abstract classes, on the other hand, are more suitable when you want to create a base class that provides a common implementation and can be extended by subclasses.
+    
+    
+    
 
 # Kotlin Runtime vs Compile time:
     
