@@ -24,6 +24,126 @@
 
 # OOPs:
 
+method overloading vs overriding
+Method overloading and method overriding are two concepts in object-oriented programming that are related to the way methods are defined and used in classes.
+
+Method overloading refers to the ability of a class to have two or more methods with the same name but with different parameters. The compiler determines which method to call based on the number and types of arguments passed to the method.
+
+Method overriding, on the other hand, refers to the ability of a subclass to provide a specific implementation of a method that is already defined in its superclass. The subclass' implementation of the method "overrides" the superclass' implementation. The subclass' method is called instead of the superclass' method when the method is called on an instance of the subclass.
+
+It's important to note that when a method is overridden, the new method should have the same name, number of parameters, and parameter types as the method being overridden. Also, the method should be marked with the override keyword.
+
+In summary, method overloading allows for multiple methods with the same name but different parameters to be defined in the same class, while method overriding allows for a subclass to provide a new implementation for a method already defined in its superclass.
+
+In Android, OOPs concepts are implemented in various ways, some examples include:
+
+Inheritance - This concept is used in Android when we extend the functionality of existing classes. For example, extending the AppCompatActivity class to create a custom activity class.
+
+Abstraction - This concept is used in Android through the use of abstract classes, which define the common behavior of a group of related classes. For example, View class is an abstract class that provides basic drawing and event handling functionality for visual components.
+
+Encapsulation - This concept is used in Android through the use of private member variables and methods, which are hidden from other parts of the code and can only be accessed through public methods. For example, the implementation details of a database adapter class can be hidden from other parts of the code using encapsulation.
+
+Polymorphism - This concept is used in Android through the use of interfaces, which allow multiple classes to implement a common behavior in different ways. For example, the OnClickListener interface is used to handle button clicks in different ways for different classes that implement it.
+
+These are just a few examples of how OOPs concepts are used in Android development.
+
+Java does not support multiple inheritance, which means a class cannot inherit from multiple parent classes simultaneously. There are a few reasons why Java was designed this way:
+
+1. Simplicity and clarity: Java aims to be a simple and easy-to-understand language. Multiple inheritance can introduce complexities and ambiguities, especially when conflicts arise between methods or member variables inherited from different parent classes. By disallowing multiple inheritance, Java avoids these issues and promotes clearer code.
+2. Diamond problem: The diamond problem occurs when a class inherits from two or more classes that have a common parent. If those parent classes have methods with the same name and signature, it becomes unclear which implementation should be used. This ambiguity is referred to as the diamond problem, and languages that support multiple inheritance need to address it explicitly. Java avoids this problem by not allowing multiple inheritance.
+3. Interface-based design: In Java, interfaces provide a mechanism for achieving multiple inheritance of types. By implementing multiple interfaces, a class can inherit multiple sets of behavior. This approach promotes a more flexible and modular design, as interfaces allow classes to be loosely coupled and provide contract-based programming.
+4. Code reuse through composition: Instead of relying on multiple inheritance, Java encourages code reuse through composition, where classes are constructed by combining multiple objects of other classes. Composition offers a more flexible and maintainable approach to code reuse, as it allows for greater modularity and avoids the complexities associated with multiple inheritance.
+
+While multiple inheritance can be useful in certain scenarios, Java's designers made a deliberate decision to prioritize simplicity, clarity, and maintainability by omitting this feature from the language.
+
+REST, which stands for Representational State Transfer, is an architectural style for building web services that are scalable, flexible, and easy to maintain. RESTful APIs allow applications to communicate with each other over the internet using HTTP protocols.
+
+At a high level, a REST API consists of resources, which are typically represented by URLs. These resources can be anything that can be identified by a unique identifier, such as users, products, or blog posts.
+
+The REST API uses HTTP methods such as GET, POST, PUT, and DELETE to perform CRUD (Create, Read, Update, Delete) operations on these resources. For example, a GET request to the URL `/users` might return a list of all the users in a system, while a POST request to the URL `/users` might create a new user.
+
+REST APIs typically return data in a format that is easily consumable by client applications, such as JSON or XML. This data can be used by the client application to display information to users or perform further processing.
+
+Overall, REST APIs are a popular choice for building web services due to their simplicity, scalability, and flexibility.
+
+## Design Pattern
+Factory pattern: Based on some conditions, it will decide which object to create. Eg. polygon factory where we pass the no. of sides.
+
+Builder pattern: it helps us build an object where multiple parameters are involved. Eg name - age class
+
+## SOLID Principles
+
+The SOLID principles are a set of guidelines that were developed to help improve the design of object-oriented software. These principles are intended to make it easier to maintain and modify software over time.
+Here's a brief overview of each of the SOLID principles, along with an example to illustrate each one:
+Single Responsibility Principle (SRP): This principle states that a class should have only one reason to change. For example, consider a class that is responsible for connecting to a database and retrieving data. This class should not also be responsible for formatting the data or displaying it to the user. Instead, it should only be responsible for the database connection and retrieval of data.
+Open/Closed Principle (OCP): This principle states that software entities (such as classes or modules) should be open for extension but closed for modification. For example, imagine that you have a class that performs some calculation, and you want to add a new type of calculation. According to the OCP, you should be able to add this new calculation by extending the class without modifying the existing code.
+Liskov Substitution Principle (LSP): This principle states that objects of a superclass should be able to be replaced with objects of a subclass without affecting the correctness of the program. For example, consider a class hierarchy where the superclass is a shape, and the subclasses are specific shapes such as circles and squares. According to the LSP, you should be able to use a circle or a square wherever a shape is expected, without affecting the correctness of the program.
+Interface Segregation Principle (ISP): This principle states that clients should not be forced to depend on interfaces they do not use. For example, consider a class that provides methods for retrieving and updating data from a database. If you have a client that only needs to retrieve data, it should not have to depend on the methods for updating data, as this would violate the ISP.
+Dependency Inversion Principle (DIP): This principle states that high-level modules should not depend on low-level modules, but rather both should depend on abstractions. For example, imagine that you have a class that performs some calculation and another class that depends on the first class to perform a specific calculation. According to the DIP, the second class should depend on an abstraction (such as an interface) rather than the concrete implementation of the first class. This allows you to change the implementation of the first class without affecting the second class.
+The principle is used to decouple the high-level and low-level modules of an application, which allows for more flexibility and maintainability.
+
+The Dependency Inversion Principle (DIP) is a design principle in object-oriented programming that encourages code to depend on abstractions rather than on concrete implementations. The principle states that high-level modules should not depend on low-level modules, but both should depend on abstractions.
+
+In simpler terms, this means that instead of coding to a specific implementation, we should code to an interface or an abstract class, so that our code can be more flexible and easily interchangeable with other implementations. This allows us to make changes to the implementation of a particular feature without affecting the code that uses it.
+
+Here's an example to illustrate this principle:
+
+Suppose we have a class called UserService that interacts with a database to retrieve and store user data. In a tightly coupled implementation, the UserService class would depend directly on the concrete implementation of the database, like so:
+class UserService {
+private val database = MySQLDatabase()
+
+```
+fun getUser(id: Int): User {
+    return database.getUser(id)
+}
+
+fun saveUser(user: User) {
+    database.saveUser(user)
+}
+
+```
+
+}
+
+This tightly couples the UserService class to the MySQL database implementation, making it difficult to swap out the database for another implementation in the future. In addition, this approach violates the Dependency Inversion Principle because the UserService class depends on a low-level module, the MySQLDatabase class.
+
+To implement DIP, we can introduce an abstraction between the UserService class and the database implementation. We can define an interface called Database that the MySQLDatabase class implements, like so:
+interface Database {
+fun getUser(id: Int): User
+fun saveUser(user: User)
+}
+
+class MySQLDatabase : Database {
+override fun getUser(id: Int): User {
+// Implementation for getting user from MySQL database
+}
+
+```
+override fun saveUser(user: User) {
+    // Implementation for saving user to MySQL database
+}
+
+```
+
+}
+
+We can then modify the UserService class to depend on the Database interface, rather than the MySQLDatabase class directly:
+class UserService(private val database: Database) {
+fun getUser(id: Int): User {
+return database.getUser(id)
+}
+
+```
+fun saveUser(user: User) {
+    database.saveUser(user)
+}
+
+```
+
+}
+
+Now, the UserService class depends on the Database interface instead of a concrete implementation, making it much more flexible and easily interchangeable with other database implementations that also implement the Database interface. This approach follows the Dependency Inversion Principle by depending on abstractions rather than concrete implementations.
+
 ## Interface vs Abstract Class:
     
  In Kotlin, starting from version 1.0, interfaces can define functions with default implementations. This feature allows interfaces to provide method implementations, making them more versatile. Here are some examples:
@@ -117,7 +237,7 @@ In summary, interfaces with default method implementations in Kotlin offer a way
     
     
 
-# Kotlin Runtime vs Compile time:
+## Kotlin Runtime vs Compile time:
     
 In Kotlin, "compile time" and "run time" are two distinct phases of a program's lifecycle. Let's explore each of these phases and provide examples to illustrate their meaning:
 
@@ -165,11 +285,11 @@ Understanding the distinction between compile time and run time is essential bec
 
     
 
-# Kotlin Data Class:
+## Kotlin Data Class:
 
 One of the many handy features that the Kotlin language offers is the data keyword. When we declare a class with the data keyword the compiler implements the equals(Object o), hashCode(), and toString() methods, thus saving us from the trouble to do it manually.
 
-# Kotlin Open Class:
+## Kotlin Open Class:
 
 In Kotlin, all the classes are final by default i.e. they can’t be inherited by default. In Java, you have to make your class final explicitly. So, to make a class inheritable to the other classes, you must mark it with the open keyword otherwise you will get an error saying “type is final so can’t be inherited”.
 
@@ -177,7 +297,7 @@ An Open class is an ordinary class that is open for extension. Meaning: by defau
 
 In short: data classes are meant as containers for values, that can be used as that. Open is a different concept, it simply boils down to: can be inherited (respectively overridden when talking about methods) by some child class.
 
-# Kotlin Scopes
+## Kotlin Scopes
 
 In Kotlin, there are several "scope functions" that can be used to control the visibility and accessibility of variables and other elements within a program. These functions include:
 
@@ -226,7 +346,7 @@ In this example, the with function is used to get the length of the string and a
 In conclusion, scope functions in Kotlin provide a convenient and efficient way to perform operations on objects within a specific scope. They help to simplify the code and make it more readable, which makes them an essential tool for any Kotlin developer.
 
 
-# Lazy, LateInit, Livedata
+## Lazy, LateInit, Livedata
 
 Lazy initialization: Lazy initialization helps us prevent unnecessary initialization of objects. In lazy initialization, the object is initialized only once and if requested again, it is taken from cache. Only val
 
@@ -261,7 +381,7 @@ setValue: Runs on main thread
 
 postValue: Runs on background thread
 
-# Static vs final:
+## Static vs final:
 Static means the value remains the same throughout the scope.
 Final means the value cant be changed. A constant is declared by using both final static. It is done in kotlin using a companion object.
 
@@ -365,7 +485,7 @@ In this code, taxRate is a runtime constant because its value is not known at co
 
 In summary, compile-time constants are hardcoded values that are known at compile-time and are replaced with their actual values during the compilation process, while runtime constants are values that are determined during program execution and are stored in memory at runtime. Compile-time constants are generally more efficient in terms of memory and performance, while runtime constants are more flexible and can vary depending on input or other factors.
 
-# Access modifiers
+## Access modifiers
 
 Kotlin modifiers work in a similar way to Java's, but with some nuances: In Java, the default modifier is package private, in Kotlin is public
 
@@ -437,10 +557,10 @@ class Example {
 In the example above, `privateProperty` and `privateFunction()` are accessible only within the `Example` class. `protectedProperty` and `protectedFunction()` can also be accessed from subclasses of `Example`. `internalProperty` and `internalFunction()` are visible within the same module. Finally, `publicFunction()` has public access and can be accessed from anywhere.
 
 
-# Kotlin Vs Java
+## Kotlin Vs Java
 Kotlin is a statically-typed programming language that is concise, expressive, and designed to be safe. It is important because it is an officially supported language for Android development, and can be used to write Android apps in a more concise and expressive way compared to Java. Kotlin is more concise and expressive than Java, and has improved syntax for things like collections, lambdas, and type inference. Kotlin also has better support for functional programming constructs like higher-order functions, inline functions, and lambdas, which can make code more readable and maintainable. Additionally, Kotlin has improved type inference and null safety, which can help prevent common programming errors. Yes, Kotlin can be used with Android. It is fully compatible with Android and can be used to write Android apps using the Android Studio development environment. Kotlin can be more concise and expressive than Java, and can also help prevent common programming errors due to its improved type inference and null safety. The Kotlin Standard Library is a set of core functions and classes that are included with every Kotlin installation. It includes functions and classes for things like collections, strings, numbers, and more. Some features of Kotlin that I find particularly useful are its concise and expressive syntax, improved type inference and null safety, and support for functional programming constructs. I also find the ability to mix Kotlin and Java code in the same project to be very useful, as it allows for a gradual migration from Java to Kotlin. In Kotlin, variables and properties can be marked as nullable or non-nullable, and the type system helps prevent null references from being used in a non-nullable context. This helps prevent common null-related errors, such as null pointer exceptions. A primary constructor in Kotlin is a constructor that is declared at the same level as the class header, and is used to initialize the class. A secondary constructor is an additional constructor that is defined inside the class body and can be used to provide additional ways to initialize an object of the class. A data class in Kotlin is a class that is specifically designed to hold data. Data classes automatically generate certain methods, such as equals, hashCode, and toString, based on the properties defined in the class. Data classes are useful when you have a simple class that primarily holds data and does not have any complex behavior. A sealed class in Kotlin is a class that is marked as sealed, and can only be subclassed within the same file as the sealed class. Sealed classes are useful when you want to define a restricted set of subclasses for a class, and want to ensure that the set of subclasses is known at compile-time. Kotlin's type system is similar to Java's, with a few key differences. Kotlin has improved type inference, which allows the compiler to infer the type of a variable based on the context in which it is used. Kotlin also has improved support for nullable types and functional types, which can make the type system more powerful and expressive.
 
-# Volatile and Synchronized
+## Volatile and Synchronized
 
 In Kotlin, volatile is a modifier that is used to indicate that a variable is subject to changes from multiple threads and needs to be read and written to in a thread-safe manner. The volatile keyword ensures that the value of a variable is always retrieved from main memory, rather than from a CPU cache, and written back to main memory, rather than to a CPU cache. This prevents other threads from seeing stale or inconsistent values of the variable, which can occur when multiple threads access the same variable without proper synchronization.
 
@@ -513,7 +633,7 @@ This ensures that the code in the synchronization block is executed atomically, 
 synchronized is a good choice for more complex use cases, where multiple threads need to access and modify a shared resource in a coordinated and thread-safe manner.
 In summary, volatile is used to ensure that a variable is always up-to-date and visible to all threads, while synchronized is used to enforce mutual exclusion on access to a shared resource. Both volatile and synchronized are important tools for ensuring thread safety in concurrent programming, and the choice between them depends on the specific requirements of your use case.
 
-# Sealed Classes
+## Sealed Classes
 
 In Kotlin, a sealed class is a special type of class that can have a limited set of subclasses. The purpose of a sealed class is to restrict the types that can inherit from it, ensuring that all possible types are known at compile time.
 
@@ -565,7 +685,7 @@ In the main function, we call the divide function twice with different arguments
 
 By using a sealed class, we ensure that all possible outcomes of the divide function are known at compile time, and we can handle them in a type-safe manner using the Result subclasses. This helps prevent runtime errors and makes the code more robust and maintainable.
 
-# Atomic 
+## Atomic 
 In Kotlin, `Atomic` is a class that provides atomic operations for variables. It is part of the `kotlinx.atomicfu` library, which is an atomic multiplatform library for Kotlin. The library offers atomic operations that ensure thread safety and prevent data races when working with mutable shared variables in concurrent programming.
 
 The `Atomic` class provides atomic operations on variables of different types, such as `AtomicInt`, `AtomicBoolean`, `AtomicReference`, etc. These classes provide atomic operations like compare-and-set, get-and-set, increment, decrement, and more. Atomic operations guarantee that the operations are performed atomically, meaning that they are indivisible and not affected by concurrent modifications.
@@ -594,7 +714,7 @@ In the example above, `AtomicInt` is used to ensure atomicity when working with 
 
 Using atomic variables from the `kotlinx.atomicfu` library can help prevent data races and ensure thread safety when multiple threads are accessing and modifying shared mutable variables.
 
-# Kotlin Flows
+## Kotlin Flows
 
 Kotlin Flow is a reactive stream library for asynchronous programming in Kotlin. It allows you to write asynchronous, non-blocking code in a more readable and concise manner.
 
@@ -772,7 +892,7 @@ However, note that `onEach` does not block the calling coroutine and does not em
 
 So, the main difference between `collect` and `onEach` is that `collect` is used to consume the data emitted by a flow, while `onEach` is used to apply an action to each element of the flow. If you just want to process the data emitted by a flow, use `collect`. If you want to apply an action to each element of the flow before processing it, use `onEach`.
 
-# Coroutines
+## Coroutines
 
 In Kotlin coroutines, a `Dispatcher` is an object that determines which thread or threads the coroutine will run on. A `Dispatcher` provides a context for the coroutine that specifies where the coroutine should execute. There are several built-in `Dispatchers` available in Kotlin coroutines, each with a different purpose. Here are some of the most commonly used dispatchers:
 
@@ -1141,7 +1261,7 @@ fun combineResults(results: List<Int>): Int {
 In this example, we define three coroutines using the `async` function, each of which simulates a long-running operation and returns a result. We then use the `awaitAll` function to wait for all three coroutines to complete, and we combine the results into a single value using the `combineResults` function. Finally, we print the final result to the console.
 
 
-# MVVM
+## MVVM
 
 MVVM (Model-View-ViewModel) is an architectural pattern that is widely used in developing Android applications. It provides a separation of concerns that makes it easy to develop and maintain complex applications. In this pattern, the user interface (View) is separated from the application logic (ViewModel), which in turn is separated from the data (Model).
 
@@ -1166,7 +1286,7 @@ In an Android application, the View is implemented using XML layout files, while
 In summary, the MVVM architecture provides a structured and organized approach to developing Android applications. It allows developers to create maintainable, testable, and scalable applications that are easy to maintain and extend over time.
 
 
-# Jetpack Compose
+## Jetpack Compose
 
 Jetpack compose: create helloworld
 
@@ -1286,7 +1406,7 @@ Remember to be mindful of potential memory leaks when using Handlers. Make sure 
 
 Overall, Handlers are a powerful tool for interacting with the main thread's message queue and updating the UI from background threads in Android applications.
 
-# Activities / Fragments
+## Activities / Fragments
 
 onPause: Activity is visible but not interactive. Eg if some system dialog comes up.
 
@@ -1335,7 +1455,7 @@ The lifecycle of a Fragment in Android follows a specific sequence of events. He
 11. `onDestroy()`: This method is called when the Fragment is being destroyed. This is where you can release any resources that the Fragment was using and perform any final cleanup.
 12. `onDetach()`: This method is called when the Fragment is no longer associated with its parent Activity. This is where you can release any references to the Activity or other Fragments that the Fragment was using.
 
-# Recyclerview vs ListView:
+## Recyclerview vs ListView:
 
 Recyclerview was introduced in Android Lollipop (5) as a successor for listview which was there from API 1.
 
@@ -1343,7 +1463,7 @@ RecyclerView enforces use of Viewholder pattern thus offers recycling of views. 
 
 Listview on the other hand was easier to implement. Did Not enforce user of viewholders. Thus bad for performance. Animations were hard to implement.has click listeners.
 
-# Service
+## Service
 
 The service lifecycle in Android defines the different states that a service can go through during its lifetime. The four main states that a service can be in are:
 
@@ -1396,7 +1516,7 @@ It queues up the upcoming request and executes them one by one.
 Once the queue is empty it stops itself, without the user’s intervention in its lifecycle.
 It does proper thread management by handling the requests on a separate thread.
 
-# Intent
+## Intent
 
 In Android, an Intent is an abstract description of an operation to be performed. It is a messaging object that can be used to request an action from another app component, such as an activity, a service, or a broadcast receiver.
 
@@ -1500,14 +1620,14 @@ It's important to note that implicit intents rely on the system to find the appr
 
 Implicit intents are useful when you want to perform a certain action, such as opening a web page or taking a photo, and don't care which app handles the request. They allow for more flexibility and reusability in app development by allowing multiple apps to handle the same intent.
 
-# Notifications
+## Notifications
 
 In Android, you can group notifications programmatically using the NotificationCompat.Builder class and the setGroup() method
 It's important to note that the group notifications feature is only available on Android 7.0 (API level 24) or higher.
 the setGroup() method is used to set the group key for each of the notifications. The group key is a string that identifies the group of notifications. The setGroupSummary() method is used to set the summary notification, which is a separate notification that represents the group as a whole.
 
 
-# APK / App bundle
+## APK / App bundle
 
 Here are some of the key differences between AAB and APK:
 
@@ -1521,7 +1641,7 @@ Distribution: AAB files can be distributed through the Google Play Store, while 
 
 Compatibility: AAB files are compatible with Android 5.0 (API level 21) and higher, while APK files are compatible with all versions of Android.
 
-# Broadcast
+## Broadcast
 
 Broadcast receivers are a component in Android that allow apps to respond to system-wide broadcast announcements. They are used to receive and respond to broadcast announcements, such as the arrival of a text message or a change in network connectivity. Broadcast receivers can be registered dynamically at runtime, or declared statically in the app's AndroidManifest.xml file. Once a broadcast receiver is registered, it will receive and respond to any broadcasts that match the intent filters specified in its registration. These responses can include performing a specific task, or launching an Activity or Service in the app.
 
@@ -1561,7 +1681,7 @@ Dynamic Broadcast Receivers: Dynamic broadcast receivers are registered at runti
 
 Both static and dynamic broadcast receivers are important for building robust and responsive Android applications. Depending on the use case, developers may choose to use one or both types of broadcast receivers in their applications. It's important to keep in mind that broadcast receivers can have a significant impact on battery life, so it's important to use them judiciously and make sure that they are unregistering when they are no longer needed.
 
-# CI / CD
+## CI / CD
 
 CI/CD:
 We have implemented CI/CD using Jenkins. There is a jenkins config file where we need to mention what happens during each stage of the pipeline. We also need to set up a dockerfile to configure the docker container. We are using sonarcube and test coverage reports as stages in the pipeline.
@@ -1594,7 +1714,7 @@ By implementing CI/CD in your Android app development workflow, you can reduce t
 
 [https://medium.com/velos/setting-up-firebase-app-distribution-with-automatic-builds-from-jenkins-2587028e2a3a](https://medium.com/velos/setting-up-firebase-app-distribution-with-automatic-builds-from-jenkins-2587028e2a3a)
 
-# Dependency Injection
+## Dependency Injection
 
 Benefits of dependency injection:
 Decouple modules (provide dependency from outside)
@@ -1626,7 +1746,7 @@ An important feature of an injector is the ability to manage the lifetime of the
 
 Overall, an injector is a key component of dependency injection, responsible for creating and managing the dependencies of an object and injecting them at runtime. It provides a powerful way to decouple objects from their dependencies and make applications more modular, maintainable, and testable.
 
-# Testing
+## Testing
 
 Local Unit test: JUnit, Mockito
 
@@ -1703,7 +1823,7 @@ assertNotNull(object): Verifies that the object is not null.
 assertArrayEquals(expectedArray, actualArray): Verifies that two arrays are equal.
 You can use these assertions in your test cases to verify the behavior of your code and ensure that it works correctly. By using assertions, you can catch bugs and defects early in the development process and improve the overall quality of your code.
 
-# Mock test
+## Mock test
 
 Mock testing is a technique used in software development to isolate and test individual components of a system by replacing their dependencies with "mock" objects that mimic the behavior of the real dependencies. This is useful in Android development because it allows you to test code that relies on complex or external dependencies in isolation, without requiring access to those dependencies.
 
@@ -1784,7 +1904,7 @@ This test class creates an instance of MyComponent with a MockApiService object,
 
 By using mock testing and dependency injection, you can test your Android components in isolation and with greater control over their dependencies. This can help you catch bugs and ensure that your app behaves as expected in a variety of scenarios.
 
-# Alarm manager , Job scheduler
+## Alarm manager , Job scheduler
 
 The AlarmManager is a class in the Android framework that allows you to schedule tasks, or "alarms," to be executed at a specific time or after a specific interval. It can be used to trigger a broadcast receiver, start a service, or execute a PendingIntent at a specific time in the future. These alarms can be scheduled to occur even if the device is in sleep mode.
 
@@ -1818,7 +1938,7 @@ Additionally, Firebase JobDispatcher is a third party library that can be used t
 
 In summary, AlarmManager, JobScheduler and Firebase JobDispatcher are all ways to schedule background tasks on Android, each one with its own advantages and disadvantages, it's important to choose the one that fits best to your use case.
 
-# Jetpack components
+## Jetpack components
 [https://developer.android.com/jetpack/androidx/explorer?case=all](https://developer.android.com/jetpack/androidx/explorer?case=all)
 
 Jetpack components used:
@@ -1854,7 +1974,7 @@ Lifecycle: a library that provides a set of classes and interfaces for managing 
 
 By using these components, developers can create more scalable, maintainable, and testable apps with less code. The components are designed to work well together and provide a consistent development experience across different Android versions and device types.
 
-# Work manager
+## Work manager
 
 what is workmanager in android?
 
@@ -1896,7 +2016,7 @@ Results and Data: WorkManager allows you to pass input and receive output data f
 
 In summary, WorkManager provides a more robust and flexible way to schedule background tasks, it's a great alternative to schedule background tasks in an app, especially when those tasks need to be executed even if the app is closed or the device is rebooted. However, it's important to note that AlarmManager is more lightweight and suitable for simple alarm use cases.
 
-# Singleton
+## Singleton
 
 In Kotlin, a thread-safe singleton can be implemented using the object keyword, which creates a class with a single instance that is lazily initialized and can be accessed from anywhere in the code.
 
@@ -2004,91 +2124,14 @@ Singleton()
 }
 
 A static variable or method can be called without creating an instance of the class, while a singleton requires an instance to be created.
-# Design Pattern
-Factory pattern: Based on some conditions, it will decide which object to create. Eg. polygon factory where we pass the no. of sides.
 
-Builder pattern: it helps us build an object where multiple parameters are involved. Eg name - age class
-
-# SOLID Principles
-
-The SOLID principles are a set of guidelines that were developed to help improve the design of object-oriented software. These principles are intended to make it easier to maintain and modify software over time.
-Here's a brief overview of each of the SOLID principles, along with an example to illustrate each one:
-Single Responsibility Principle (SRP): This principle states that a class should have only one reason to change. For example, consider a class that is responsible for connecting to a database and retrieving data. This class should not also be responsible for formatting the data or displaying it to the user. Instead, it should only be responsible for the database connection and retrieval of data.
-Open/Closed Principle (OCP): This principle states that software entities (such as classes or modules) should be open for extension but closed for modification. For example, imagine that you have a class that performs some calculation, and you want to add a new type of calculation. According to the OCP, you should be able to add this new calculation by extending the class without modifying the existing code.
-Liskov Substitution Principle (LSP): This principle states that objects of a superclass should be able to be replaced with objects of a subclass without affecting the correctness of the program. For example, consider a class hierarchy where the superclass is a shape, and the subclasses are specific shapes such as circles and squares. According to the LSP, you should be able to use a circle or a square wherever a shape is expected, without affecting the correctness of the program.
-Interface Segregation Principle (ISP): This principle states that clients should not be forced to depend on interfaces they do not use. For example, consider a class that provides methods for retrieving and updating data from a database. If you have a client that only needs to retrieve data, it should not have to depend on the methods for updating data, as this would violate the ISP.
-Dependency Inversion Principle (DIP): This principle states that high-level modules should not depend on low-level modules, but rather both should depend on abstractions. For example, imagine that you have a class that performs some calculation and another class that depends on the first class to perform a specific calculation. According to the DIP, the second class should depend on an abstraction (such as an interface) rather than the concrete implementation of the first class. This allows you to change the implementation of the first class without affecting the second class.
-The principle is used to decouple the high-level and low-level modules of an application, which allows for more flexibility and maintainability.
-
-The Dependency Inversion Principle (DIP) is a design principle in object-oriented programming that encourages code to depend on abstractions rather than on concrete implementations. The principle states that high-level modules should not depend on low-level modules, but both should depend on abstractions.
-
-In simpler terms, this means that instead of coding to a specific implementation, we should code to an interface or an abstract class, so that our code can be more flexible and easily interchangeable with other implementations. This allows us to make changes to the implementation of a particular feature without affecting the code that uses it.
-
-Here's an example to illustrate this principle:
-
-Suppose we have a class called UserService that interacts with a database to retrieve and store user data. In a tightly coupled implementation, the UserService class would depend directly on the concrete implementation of the database, like so:
-class UserService {
-private val database = MySQLDatabase()
-
-```
-fun getUser(id: Int): User {
-    return database.getUser(id)
-}
-
-fun saveUser(user: User) {
-    database.saveUser(user)
-}
-
-```
-
-}
-
-This tightly couples the UserService class to the MySQL database implementation, making it difficult to swap out the database for another implementation in the future. In addition, this approach violates the Dependency Inversion Principle because the UserService class depends on a low-level module, the MySQLDatabase class.
-
-To implement DIP, we can introduce an abstraction between the UserService class and the database implementation. We can define an interface called Database that the MySQLDatabase class implements, like so:
-interface Database {
-fun getUser(id: Int): User
-fun saveUser(user: User)
-}
-
-class MySQLDatabase : Database {
-override fun getUser(id: Int): User {
-// Implementation for getting user from MySQL database
-}
-
-```
-override fun saveUser(user: User) {
-    // Implementation for saving user to MySQL database
-}
-
-```
-
-}
-
-We can then modify the UserService class to depend on the Database interface, rather than the MySQLDatabase class directly:
-class UserService(private val database: Database) {
-fun getUser(id: Int): User {
-return database.getUser(id)
-}
-
-```
-fun saveUser(user: User) {
-    database.saveUser(user)
-}
-
-```
-
-}
-
-Now, the UserService class depends on the Database interface instead of a concrete implementation, making it much more flexible and easily interchangeable with other database implementations that also implement the Database interface. This approach follows the Dependency Inversion Principle by depending on abstractions rather than concrete implementations.
-
-# RxJava
+## RxJava
 
 RxJava is a Java-based library that provides a set of reactive programming types and operators that you can use to build responsive, scalable, and concurrent applications. It allows you to compose asynchronous and event-based programs by using observable sequences, and it can be used to build fast and responsive applications that can handle a high volume of concurrency.
 LiveData is a lifecycle-aware data holder that allows you to observe changes to data across multiple components of your app, including activities, fragments, and services. It is designed to hold data that is used in UI and that can be observed by UI components. LiveData is lifecycle-aware, meaning it respects the lifecycle of other app components, such as activities and fragments. This allows it to automatically stop and start observing data changes when the lifecycle state of the observing component changes.
 In summary, RxJava is a reactive programming library that allows you to build asynchronous and event-based programs, while LiveData is a data holder that is lifecycle-aware and can be observed by UI components. They can be used together, but they serve different purposes and are not directly related to each other.
 
-# Serializable and Parcelable
+## Serializable and Parcelable
 
 In Android, Serializable and Parcelable are two mechanisms for transferring data between activities, services, and other Android components.
 
@@ -2158,7 +2201,7 @@ public static final Creator<MyClass> CREATOR = new Creator<MyClass>() {
         }
         
 ```
-# IPC / AIDL
+## IPC / AIDL
 
 There are several ways to communicate between two different apps in Android:
 
@@ -2193,51 +2236,10 @@ Another alternative is using Binder, it is Android's built-in IPC mechanism that
 Overall, the choice of IPC mechanism will depend on the specific requirements of the app. AIDL is useful when the service needs to handle complex data types or handle multiple requests simultaneously, while Messenger is simpler to use and is suitable for simple communication needs. Binder is also a good option when the app needs a powerful and flexible IPC mechanism.
 
 
-# OOPs
 
-method overloading vs overriding
-Method overloading and method overriding are two concepts in object-oriented programming that are related to the way methods are defined and used in classes.
 
-Method overloading refers to the ability of a class to have two or more methods with the same name but with different parameters. The compiler determines which method to call based on the number and types of arguments passed to the method.
 
-Method overriding, on the other hand, refers to the ability of a subclass to provide a specific implementation of a method that is already defined in its superclass. The subclass' implementation of the method "overrides" the superclass' implementation. The subclass' method is called instead of the superclass' method when the method is called on an instance of the subclass.
-
-It's important to note that when a method is overridden, the new method should have the same name, number of parameters, and parameter types as the method being overridden. Also, the method should be marked with the override keyword.
-
-In summary, method overloading allows for multiple methods with the same name but different parameters to be defined in the same class, while method overriding allows for a subclass to provide a new implementation for a method already defined in its superclass.
-
-In Android, OOPs concepts are implemented in various ways, some examples include:
-
-Inheritance - This concept is used in Android when we extend the functionality of existing classes. For example, extending the AppCompatActivity class to create a custom activity class.
-
-Abstraction - This concept is used in Android through the use of abstract classes, which define the common behavior of a group of related classes. For example, View class is an abstract class that provides basic drawing and event handling functionality for visual components.
-
-Encapsulation - This concept is used in Android through the use of private member variables and methods, which are hidden from other parts of the code and can only be accessed through public methods. For example, the implementation details of a database adapter class can be hidden from other parts of the code using encapsulation.
-
-Polymorphism - This concept is used in Android through the use of interfaces, which allow multiple classes to implement a common behavior in different ways. For example, the OnClickListener interface is used to handle button clicks in different ways for different classes that implement it.
-
-These are just a few examples of how OOPs concepts are used in Android development.
-
-Java does not support multiple inheritance, which means a class cannot inherit from multiple parent classes simultaneously. There are a few reasons why Java was designed this way:
-
-1. Simplicity and clarity: Java aims to be a simple and easy-to-understand language. Multiple inheritance can introduce complexities and ambiguities, especially when conflicts arise between methods or member variables inherited from different parent classes. By disallowing multiple inheritance, Java avoids these issues and promotes clearer code.
-2. Diamond problem: The diamond problem occurs when a class inherits from two or more classes that have a common parent. If those parent classes have methods with the same name and signature, it becomes unclear which implementation should be used. This ambiguity is referred to as the diamond problem, and languages that support multiple inheritance need to address it explicitly. Java avoids this problem by not allowing multiple inheritance.
-3. Interface-based design: In Java, interfaces provide a mechanism for achieving multiple inheritance of types. By implementing multiple interfaces, a class can inherit multiple sets of behavior. This approach promotes a more flexible and modular design, as interfaces allow classes to be loosely coupled and provide contract-based programming.
-4. Code reuse through composition: Instead of relying on multiple inheritance, Java encourages code reuse through composition, where classes are constructed by combining multiple objects of other classes. Composition offers a more flexible and maintainable approach to code reuse, as it allows for greater modularity and avoids the complexities associated with multiple inheritance.
-
-While multiple inheritance can be useful in certain scenarios, Java's designers made a deliberate decision to prioritize simplicity, clarity, and maintainability by omitting this feature from the language.
-
-REST, which stands for Representational State Transfer, is an architectural style for building web services that are scalable, flexible, and easy to maintain. RESTful APIs allow applications to communicate with each other over the internet using HTTP protocols.
-
-At a high level, a REST API consists of resources, which are typically represented by URLs. These resources can be anything that can be identified by a unique identifier, such as users, products, or blog posts.
-
-The REST API uses HTTP methods such as GET, POST, PUT, and DELETE to perform CRUD (Create, Read, Update, Delete) operations on these resources. For example, a GET request to the URL `/users` might return a list of all the users in a system, while a POST request to the URL `/users` might create a new user.
-
-REST APIs typically return data in a format that is easily consumable by client applications, such as JSON or XML. This data can be used by the client application to display information to users or perform further processing.
-
-Overall, REST APIs are a popular choice for building web services due to their simplicity, scalability, and flexibility.
-
-# App Cache
+## App Cache
 
 To increase the cache size of an Android application, you can follow these steps:
 
@@ -2252,7 +2254,7 @@ Modify the cache size in the onLowMemory() method: If you need to increase the c
 
 It's important to note that increasing the cache size will consume more memory, so it's important to strike a balance between performance and memory usage. Additionally, it's important to regularly clean the cache to prevent it from becoming too large and causing performance issues.
 
-# ViewModel in detail
+## ViewModel in detail
 
 The ViewModel component is a lifecycle-aware component that allows data to survive configuration changes such as orientation changes, without the need to reload data from scratch. When an orientation change occurs, the activity or fragment that contains the ViewModel is destroyed and recreated. However, the ViewModel instance is not destroyed along with it and is instead retained in memory by the ViewModelStore.
 
@@ -2293,7 +2295,7 @@ ViewModelProviders provides a factory class that can be used to create instances
 In summary, ViewModelProviders is a utility class that makes it easy to create and manage ViewModel objects in an Android application, and is an essential part of the Android Architecture Components library.
 
 
-# Memory leaks / Profiler
+## Memory leaks / Profiler
 
 Memory leaks are a common issue in Android development, and they occur when objects are allocated and never released, causing the memory usage of an app to grow over time. These leaks can cause performance issues, crashes, and other unexpected behaviors. In this answer, we'll discuss various ways to check and handle memory leaks in Android.
 
@@ -2357,7 +2359,7 @@ Fix the memory leak by identifying the cause and making the necessary code chang
 
 By following these steps, you can effectively use the Android Profiler to identify memory leaks in your app and take the necessary steps to fix them. It's important to note that memory leaks can have a significant impact on the performance and stability of your app, so it's important to regularly use the Profiler to monitor and identify any potential issues.
 
-# Operators
+## Operators
 
 `map` and `filter` are both methods used in functional programming to transform collections of data. Here's a brief explanation of each:
 
