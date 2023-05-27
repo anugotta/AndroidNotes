@@ -144,6 +144,194 @@ fun saveUser(user: User) {
 
 Now, the UserService class depends on the Database interface instead of a concrete implementation, making it much more flexible and easily interchangeable with other database implementations that also implement the Database interface. This approach follows the Dependency Inversion Principle by depending on abstractions rather than concrete implementations.
 
+# Kotlin
+
+## Operators
+
+`map` and `filter` are both methods used in functional programming to transform collections of data. Here's a brief explanation of each:
+
+`map`:
+
+- Transforms each element of a collection based on a given function
+- Returns a new collection with the transformed elements
+- The number of elements in the new collection is the same as the original collection
+
+Example:
+
+```
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+
+List<Integer> doubledNumbers = numbers.stream()
+                                      .map(number -> number * 2)
+                                      .collect(Collectors.toList());
+
+```
+
+In this example, we start with a list of integers and use the `map` method to double each number. The resulting `doubledNumbers` list contains the same number of elements as the original `numbers` list, but each element has been transformed.
+
+`filter`:
+
+- Selects only the elements of a collection that satisfy a given condition
+- Returns a new collection with the selected elements
+- The number of elements in the new collection can be less than or equal to the number of elements in the original collection
+
+Example:
+
+```
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+
+List<Integer> evenNumbers = numbers.stream()
+                                    .filter(number -> number % 2 == 0)
+                                    .collect(Collectors.toList());
+
+```
+
+In this example, we start with a list of integers and use the `filter` method to keep only the even numbers. The resulting `evenNumbers` list contains only the even elements from the original `numbers` list.
+
+In summary, `map` is used to transform each element of a collection, while `filter` is used to select only certain elements from a collection based on a given condition. Both `map` and `filter` are powerful tools in functional programming that can help you write more expressive, efficient, and maintainable code.
+
+Yes, there are several other functions used for transforming data in functional programming. Here are a few examples:
+
+1. `reduce`:
+- Combines the elements of a collection into a single value
+- The result of the function is passed as an accumulator to the next element in the collection
+
+Example:
+
+```
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+
+int sum = numbers.stream()
+                 .reduce(0, (accumulator, number) -> accumulator + number);
+
+```
+
+In this example, we use the `reduce` method to sum the elements of the `numbers` list. We start with an initial value of `0` and then add each element to the accumulator to get the final sum.
+
+1. `flatMap`:
+- Transforms each element of a collection into a stream of elements
+- Flattens the resulting stream of streams into a single stream
+
+Example:
+
+```
+List<List<Integer>> listOfLists = Arrays.asList(
+    Arrays.asList(1, 2),
+    Arrays.asList(3, 4),
+    Arrays.asList(5, 6)
+);
+
+List<Integer> flatList = listOfLists.stream()
+                                     .flatMap(list -> list.stream())
+                                     .collect(Collectors.toList());
+
+```
+
+In this example, we start with a list of lists and use the `flatMap` method to flatten it into a single list. Each sub-list is transformed into a stream of integers, and then the resulting streams are flattened into a single stream of integers.
+
+1. `distinct`:
+- Removes duplicate elements from a collection
+
+Example:
+
+```
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 2, 4);
+
+List<Integer> uniqueNumbers = numbers.stream()
+                                      .distinct()
+                                      .collect(Collectors.toList());
+
+```
+
+In this example, we start with a list of integers that contains duplicates. We use the `distinct` method to remove the duplicates and get a list of unique numbers.
+
+These are just a few examples of the many transform functions available in functional programming. By combining these functions in different ways, you can build powerful and expressive programs that are easy to reason about and maintain.
+
+You're right, I apologize for omitting `switchMap` in my previous response. `switchMap` is a transform function commonly used in reactive programming, particularly with RxJava and Kotlin Flow. Here's a brief explanation of what it does:
+
+`switchMap`:
+
+- Maps each element of a stream to a new stream, and then switches to emitting the items from the most recently mapped stream
+- Can be used to cancel previous emissions and start a new stream when a new event occurs
+
+Example:
+
+```
+val searchQueryFlow: Flow<String> = searchQueryEditText.textChanges()
+    .debounce(500)
+    .map { it.toString() }
+    .distinctUntilChanged()
+
+val searchResultsFlow: Flow<List<SearchResult>> = searchQueryFlow
+    .flatMapLatest { query ->
+        repository.search(query)
+    }
+
+```
+
+In this example, we have a search box (`searchQueryEditText`) that emits a stream of text changes. We use `debounce` to only emit events when the user stops typing for 500 milliseconds, and then map each text change to a string. We also use `distinctUntilChanged` to only emit a new query when the text has actually changed.
+
+Next, we use `flatMapLatest` to map each search query to a new stream of search results from the repository. The `flatMapLatest` operator will cancel any previous search requests that are still in progress and only emit the results of the most recent search query.
+
+So, `switchMap` is a powerful transform function that can be used to dynamically switch between streams and cancel previous emissions when new events occur. It's especially useful in scenarios where you need to perform expensive operations, such as network requests or database queries, in response to user input.
+
+There are a few other transform functions that are commonly used in reactive programming. Here's a brief explanation of each:
+
+1. `concatMap`:
+- Maps each element of a stream to a new stream, and then concatenates the emissions from each mapped stream in the order they were emitted
+- Useful when you need to maintain the order of emissions, but some emissions may take longer to complete than others
+
+Example:
+
+```
+val clicksFlow: Flow<Int> = buttonClicks.asFlow()
+
+val resultsFlow: Flow<String> = clicksFlow
+    .concatMap { clickCount ->
+        repository.fetchResults(clickCount)
+    }
+
+```
+
+In this example, we have a button that emits a stream of click events. We use `concatMap` to map each click event to a new stream of results from the repository, and then concatenate the emissions from each stream in the order they were emitted. This ensures that the results for each click event are emitted in the correct order, even if some requests take longer than others.
+
+1. `buffer`:
+- Collects a certain number of emissions into a buffer, and then emits the buffer as a single element
+- Useful when you need to batch emissions to reduce overhead or optimize performance
+
+Example:
+
+```
+val clicksFlow: Flow<Int> = buttonClicks.asFlow()
+
+val bufferFlow: Flow<List<Int>> = clicksFlow
+    .buffer(10)
+
+```
+
+In this example, we have a button that emits a stream of click events. We use `buffer` to collect 10 click events into a buffer, and then emit the buffer as a single list of integers. This reduces the number of emissions and can help optimize performance in some scenarios.
+
+1. `scan`:
+- Applies a function to each element of a stream, and emits the intermediate results as they're generated
+- Useful for calculating running totals, accumulating values, or generating a sequence of intermediate results
+
+Example:
+
+```
+val numbersFlow: Flow<Int> = numbers.asFlow()
+
+val sumFlow: Flow<Int> = numbersFlow
+    .scan(0) { accumulator, number ->
+        accumulator + number
+    }
+
+```
+
+In this example, we have a stream of numbers. We use `scan` to calculate the running sum of the numbers, by adding each number to the accumulator and emitting the intermediate result as it's generated.
+
+These are just a few more examples of the many transform functions available in reactive programming. By combining these functions in different ways, you can build powerful and expressive programs that are highly responsive and resilient to errors.
+
+
 ## Interface vs Abstract Class:
     
  In Kotlin, starting from version 1.0, interfaces can define functions with default implementations. This feature allows interfaces to provide method implementations, making them more versatile. Here are some examples:
@@ -235,7 +423,115 @@ Interfaces with default method implementations in Kotlin share some similarities
 In summary, interfaces with default method implementations in Kotlin offer a way to define contracts with default behavior that can be implemented by multiple classes. They enable multiple inheritance of behavior and allow for greater flexibility in designing class hierarchies. Abstract classes, on the other hand, are more suitable when you want to create a base class that provides a common implementation and can be extended by subclasses.
     
     
-    
+   ## Singleton
+
+In Kotlin, a thread-safe singleton can be implemented using the object keyword, which creates a class with a single instance that is lazily initialized and can be accessed from anywhere in the code.
+
+To make the singleton thread-safe, you can use the double-checked locking pattern. Here's an example implementation:
+
+object MySingleton {
+@Volatile private var instance: MySingleton? = null
+
+```
+fun getInstance(): MySingleton {
+    val currentInstance = instance
+    if (currentInstance != null) {
+        return currentInstance
+    }
+
+    synchronized(this) {
+        var newInstance = instance
+        if (newInstance == null) {
+            newInstance = MySingleton()
+            instance = newInstance
+        }
+        return newInstance
+    }
+}
+
+```
+
+}
+
+In this implementation, the instance variable is marked as @Volatile, which ensures that any changes to it are immediately visible to all threads. The getInstance() method first checks if an instance has already been created and returns it if it exists. If not, it acquires a lock on the MySingleton object and checks again to ensure that no other threads have created the instance while waiting for the lock. If the instance still doesn't exist, it creates a new one and assigns it to the instance variable.
+
+Note that while this implementation is thread-safe, it can still suffer from performance issues due to the overhead of acquiring and releasing the lock. An alternative approach is to use a lazy-initialized property with a thread-safe initializer function:
+
+object MySingleton {
+val instance by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) { MySingleton() }
+}
+
+In this implementation, the instance property is lazily initialized and uses the SYNCHRONIZED mode to ensure that the initialization is thread-safe. This approach can be more efficient than the double-checked locking pattern, as the lock is only acquired once during the initialization process.
+
+In this example, the Singleton class has a private constructor, which prevents other classes from instantiating it directly. Instead, other classes must use the getInstance() method to access the singleton instance. This method uses lazy initialization to create the instance object only if it hasn't been created already. This ensures that only one instance of the Singleton class exists at any given time.
+
+public class Singleton {
+private static Singleton instance;
+
+```
+private Singleton() {
+    // private constructor to prevent instantiation
+}
+
+public static Singleton getInstance() {
+    if (instance == null) {
+        instance = new Singleton();
+    }
+    return instance;
+}
+
+```
+
+}
+
+There are several ways to create a singleton class in Kotlin. Here are a few examples:
+
+Using a companion object: In this approach, the singleton class has a companion object with a getInstance() method that returns the singleton instance. The instance object is created using lazy initialization to ensure that it is only created when it is needed. Here is an example of this approach:
+
+//Kotlin
+class MySingleton private constructor() {
+companion object {
+private val instance = MySingleton()
+
+```
+        fun getInstance(): MySingleton {
+            return instance
+        }
+    }
+
+    fun doSomething() {
+        // implementation
+    }
+}
+
+```
+
+Using the object keyword: In this approach, the singleton class is declared using the object keyword. This creates a singleton object that is initialized when the class is loaded. Here is an example of this approach:
+
+object Singleton {
+// Singleton class implementation goes here
+}
+
+Using the by lazy delegate: In this approach, the instance object is created using the by lazy delegate, which ensures that the object is only created when it is first accessed. Here is an example of this approach:
+
+class Singleton private constructor() {
+companion object {
+private val instance: Singleton by lazy {
+Singleton()
+}
+
+```
+    fun getInstance(): Singleton {
+        return instance
+    }
+}
+
+```
+
+}
+
+A static variable or method can be called without creating an instance of the class, while a singleton requires an instance to be created.
+
 
 ## Kotlin Runtime vs Compile time:
     
@@ -714,7 +1010,7 @@ In the example above, `AtomicInt` is used to ensure atomicity when working with 
 
 Using atomic variables from the `kotlinx.atomicfu` library can help prevent data races and ensure thread safety when multiple threads are accessing and modifying shared mutable variables.
 
-## Kotlin Flows
+# Kotlin Flows
 
 Kotlin Flow is a reactive stream library for asynchronous programming in Kotlin. It allows you to write asynchronous, non-blocking code in a more readable and concise manner.
 
@@ -892,7 +1188,7 @@ However, note that `onEach` does not block the calling coroutine and does not em
 
 So, the main difference between `collect` and `onEach` is that `collect` is used to consume the data emitted by a flow, while `onEach` is used to apply an action to each element of the flow. If you just want to process the data emitted by a flow, use `collect`. If you want to apply an action to each element of the flow before processing it, use `onEach`.
 
-## Coroutines
+# Coroutines
 
 In Kotlin coroutines, a `Dispatcher` is an object that determines which thread or threads the coroutine will run on. A `Dispatcher` provides a context for the coroutine that specifies where the coroutine should execute. There are several built-in `Dispatchers` available in Kotlin coroutines, each with a different purpose. Here are some of the most commonly used dispatchers:
 
@@ -1261,7 +1557,7 @@ fun combineResults(results: List<Int>): Int {
 In this example, we define three coroutines using the `async` function, each of which simulates a long-running operation and returns a result. We then use the `awaitAll` function to wait for all three coroutines to complete, and we combine the results into a single value using the `combineResults` function. Finally, we print the final result to the console.
 
 
-## MVVM
+# MVVM
 
 MVVM (Model-View-ViewModel) is an architectural pattern that is widely used in developing Android applications. It provides a separation of concerns that makes it easy to develop and maintain complex applications. In this pattern, the user interface (View) is separated from the application logic (ViewModel), which in turn is separated from the data (Model).
 
@@ -1285,6 +1581,19 @@ In an Android application, the View is implemented using XML layout files, while
 
 In summary, the MVVM architecture provides a structured and organized approach to developing Android applications. It allows developers to create maintainable, testable, and scalable applications that are easy to maintain and extend over time.
 
+
+
+# Git
+
+## Git merge vs rebase:
+
+- Git merge and rebase are ways to merge two branches for example we need to merge a feature branch to a master branch.
+- In case of git merge, whatever commits are in the feature branch, that is merged as a single commit in the master branch and we can easily track the merge history.
+- In case of rebase, the commits in feature branch is as it is replicated in the master branch. So the commit history is linear and it's difficult to track the history of commits.
+
+[https://www.edureka.co/blog/git-rebase-vs-merge/](https://www.edureka.co/blog/git-rebase-vs-merge/)
+
+# Android
 
 ## Jetpack Compose
 
@@ -1311,17 +1620,6 @@ Jetpack compose: create helloworld
     messageCard(“Android”)
     }
 
-# Git
-
-## Git merge vs rebase:
-
-- Git merge and rebase are ways to merge two branches for example we need to merge a feature branch to a master branch.
-- In case of git merge, whatever commits are in the feature branch, that is merged as a single commit in the master branch and we can easily track the merge history.
-- In case of rebase, the commits in feature branch is as it is replicated in the master branch. So the commit history is linear and it's difficult to track the history of commits.
-
-[https://www.edureka.co/blog/git-rebase-vs-merge/](https://www.edureka.co/blog/git-rebase-vs-merge/)
-
-# Android
 `ComponentActivity` and `AppCompatActivity` are both base classes provided by the Android framework for building activities in Android applications. While they serve similar purposes, there are some differences between the two.
 
 1. Inheritance:
@@ -1681,229 +1979,6 @@ Dynamic Broadcast Receivers: Dynamic broadcast receivers are registered at runti
 
 Both static and dynamic broadcast receivers are important for building robust and responsive Android applications. Depending on the use case, developers may choose to use one or both types of broadcast receivers in their applications. It's important to keep in mind that broadcast receivers can have a significant impact on battery life, so it's important to use them judiciously and make sure that they are unregistering when they are no longer needed.
 
-## CI / CD
-
-CI/CD:
-We have implemented CI/CD using Jenkins. There is a jenkins config file where we need to mention what happens during each stage of the pipeline. We also need to set up a dockerfile to configure the docker container. We are using sonarcube and test coverage reports as stages in the pipeline.
-
-CI/CD stands for Continuous Integration and Continuous Delivery/Deployment. In the context of Android app development, CI/CD refers to a set of practices and tools that automate the process of building, testing, and deploying Android apps.
-
-Continuous Integration (CI) is the practice of automatically building and testing an application whenever changes are made to the codebase. The goal of CI is to catch any issues early in the development cycle, before they have a chance to cause larger problems down the line.
-
-Continuous Delivery (CD) is the practice of automatically deploying an application to a staging environment after it has been built and tested. The goal of CD is to ensure that the application is ready for release as soon as it has passed all the necessary tests.
-
-Continuous Deployment (CD) takes things a step further by automatically deploying the application to production after it has been built and tested.
-
-Implementing CI/CD in an Android app development workflow involves using a combination of tools and processes to automate various tasks, such as building the app, running tests, and deploying to various environments.
-
-Here are some steps to implement CI/CD for an Android app:
-
-Use a version control system, such as Git, to manage your codebase.
-
-Use a build automation tool, such as Gradle, to automate the process of building your app.
-
-Use a testing framework, such as JUnit, to automate the process of testing your app.
-
-Use a continuous integration tool, such as Jenkins or CircleCI, to automatically build and test your app whenever changes are made to the codebase.
-
-Use a continuous delivery/deployment tool, such as Fastlane or Google Play Console, to automatically deploy your app to various environments, such as a staging environment or production environment.
-
-Monitor your app using tools such as Crashlytics or Firebase Analytics, to catch and fix issues as they arise.
-
-By implementing CI/CD in your Android app development workflow, you can reduce the amount of time and effort required to build, test, and deploy your app, while also improving the overall quality of your app.
-
-[https://medium.com/velos/setting-up-firebase-app-distribution-with-automatic-builds-from-jenkins-2587028e2a3a](https://medium.com/velos/setting-up-firebase-app-distribution-with-automatic-builds-from-jenkins-2587028e2a3a)
-
-## Dependency Injection
-
-Benefits of dependency injection:
-Decouple modules (provide dependency from outside)
-Helps with unit testing by mocking dependencies.
-Improves code reusability
-Reduce boilerplate code in application class since all the work to initialize dependencies is handled by injector component
-
-Hilt vs Dagger:
-Hilt can be considered as an extension of dagger. It helps us reduce the boilerplate code that's associated with dagger by generating the setup code and components by itself thus helping us ease the integration. Hilt is designed specifically for android unlike dagger which is a Java DI framework
-
-Example injection a viewmodel using hilt is as easy as adding a few annotations.
-
-@HiltAndroidApp
-Application class
-
-@HiltViewmodel
-Viewmodel class
-
-@HiltEntryPoint
-Activity Class
-
-In dependency injection (DI), an injector is a mechanism or framework that creates and manages the dependencies of an object and injects them into the object at runtime. The injector is responsible for resolving dependencies, creating the necessary objects, and providing them to the requesting object.
-
-The injector typically works by first analyzing the dependencies of the object being requested, and then recursively analyzing the dependencies of those dependencies until all dependencies have been resolved. The injector then creates the necessary objects and injects them into the requesting object, often through a constructor or a setter method.
-
-DI injectors can be implemented in different ways, depending on the programming language, framework, or library being used. Some DI frameworks use reflection or metadata to analyze and resolve dependencies, while others use configuration files or annotations.
-
-An important feature of an injector is the ability to manage the lifetime of the objects it creates. Depending on the requirements of the application, the injector may create a new object for each request, reuse an existing object if available, or maintain a pool of objects to be reused as needed.
-
-Overall, an injector is a key component of dependency injection, responsible for creating and managing the dependencies of an object and injecting them at runtime. It provides a powerful way to decouple objects from their dependencies and make applications more modular, maintainable, and testable.
-
-## Testing
-
-Local Unit test: JUnit, Mockito
-
-[]()
-
-Instrumentation tests(a kind of functional tests): Espresso, Robolectric, Robotium
-
-unit test vs instrumentation test in android
-Unit tests in Android are tests that are written to test individual units of code, such as a single method or class. These tests are typically run on a local development machine and do not require an Android device or emulator to run.
-
-Instrumentation tests, on the other hand, are tests that are run on an Android device or emulator. These tests have access to the Android framework and can test the application's user interface and interactions with the system. They are typically slower to run and more complex to write than unit tests.
-
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-
-public class ExampleUnitTest {
-@Test
-public void addition_isCorrect() {
-assertEquals(4, 2 + 2);
-}
-}
-
-This test case uses the assertEquals method to verify that the result of the expression 2 + 2 is equal to 4. The @Test annotation indicates that this is a test method that should be executed by the test runner.
-
-To run this test, you'll need to create a test class in your Android project and add this code to the class. You can then run the tests using a test runner, such as the JUnit test runner provided by Android Studio. If the test passes, you'll see a green checkmark next to the test method. If the test fails, you'll see a red X and an error message indicating what went wrong.
-
-import org.junit.Test;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-public class EmailValidatorTest {
-
-```
-@Test
-public void emailValidator_CorrectEmailSimple_ReturnsTrue() {
-    assertTrue(EmailValidator.isValidEmail("name@email.com"));
-}
-
-@Test
-public void emailValidator_CorrectEmailSubDomain_ReturnsTrue() {
-    assertTrue(EmailValidator.isValidEmail("name@email.co.uk"));
-}
-
-@Test
-public void emailValidator_InvalidEmailNoTld_ReturnsFalse() {
-    assertFalse(EmailValidator.isValidEmail("name@email"));
-}
-
-@Test
-public void emailValidator_InvalidEmailDoubleDot_ReturnsFalse() {
-    assertFalse(EmailValidator.isValidEmail("name@email..com"));
-}
-
-@Test
-public void emailValidator_InvalidEmailNoUsername_ReturnsFalse() {
-    assertFalse(EmailValidator.isValidEmail("@email.com"));
-}
-
-```
-
-}
-
-In JUnit, the assert keywords are used to perform assertions or verifications in your test cases. Assertions allow you to verify that the code under test produces the expected results. If an assertion fails, the test case will fail and an error message will be reported by the test runner.
-
-Here are some of the most commonly used assert keywords in JUnit:
-
-assertEquals(expected, actual): Verifies that the expected and actual values are equal.
-assertTrue(condition): Verifies that the condition is true.
-assertFalse(condition): Verifies that the condition is false.
-assertNull(object): Verifies that the object is null.
-assertNotNull(object): Verifies that the object is not null.
-assertArrayEquals(expectedArray, actualArray): Verifies that two arrays are equal.
-You can use these assertions in your test cases to verify the behavior of your code and ensure that it works correctly. By using assertions, you can catch bugs and defects early in the development process and improve the overall quality of your code.
-
-## Mock test
-
-Mock testing is a technique used in software development to isolate and test individual components of a system by replacing their dependencies with "mock" objects that mimic the behavior of the real dependencies. This is useful in Android development because it allows you to test code that relies on complex or external dependencies in isolation, without requiring access to those dependencies.
-
-One approach to implementing mock testing in Android is through the use of dependency injection (DI), a design pattern that provides a way to manage the creation and lifetime of objects in a system. There are several ways to implement DI in Android, including using a framework like Dagger or Koin. Here are some steps to follow to do mock testing in Android using dependency injection:
-
-Identify the dependencies of the component you want to test: Before you can begin mock testing a component, you need to identify which dependencies it relies on. These might include APIs, databases, external services, or other components in your app.
-
-Create an interface for the dependency: To make the dependency more testable, create an interface that defines the methods or properties that the component uses to interact with the dependency.
-
-Create a mock implementation of the dependency: Next, create a mock implementation of the dependency that implements the interface you created in step 2. This mock implementation should mimic the behavior of the real dependency as closely as possible, but without relying on any external resources.
-
-Inject the dependency into the component: Modify the component to use the interface you created in step 2 instead of directly using the real dependency. Then, use a DI framework to inject the real or mock dependency into the component.
-
-Write tests for the component: With the mock dependency in place, you can now write tests for the component that exercise its behavior in isolation. Use the mock implementation of the dependency to simulate different scenarios, and verify that the component behaves as expected.
-
-By using dependency injection and mock objects, you can test your Android components more thoroughly and with greater confidence that they will work as expected in production. This can help you catch bugs earlier in the development process and reduce the risk of introducing regressions when making changes to your code.
-
-here is an example of how you can use mock testing in Android with code:
-
-Let's say you have an Android app that retrieves data from a remote server using the Retrofit library. You want to test a component of your app that uses this library, but you don't want to rely on a real server during testing. To do this, you can use mock testing and dependency injection to substitute a mock version of the Retrofit library during testing.
-
-First, you need to create an interface that defines the methods you want to use from the Retrofit library. For example:
-interface ApiService {
-@GET("/users/{userId}")
-suspend fun getUserById(@Path("userId") userId: String): User
-}
-
-This interface defines a single method getUserById that retrieves a User object from the server based on an ID.
-
-Next, you can create a mock implementation of this interface using a mocking library such as Mockito. For example:
-
-class MockApiService : ApiService {
-override suspend fun getUserById(userId: String): User {
-// Return a mock User object for testing purposes
-return User(userId, "Mock User")
-}
-}
-
-This mock implementation simply returns a hard-coded User object instead of making a network request to the server.
-
-Now you can modify the component you want to test to use this interface instead of the real Retrofit library. For example:
-
-class MyComponent(private val apiService: ApiService) {
-suspend fun fetchUser(userId: String): User {
-// Use the ApiService interface to retrieve the user
-return apiService.getUserById(userId)
-}
-}
-
-This component takes an ApiService object as a constructor parameter and uses it to retrieve a user based on an ID.
-
-Finally, in your test class, you can create an instance of the MyComponent class using the MockApiService mock implementation. For example:
-
-class MyComponentTest {
-private lateinit var myComponent: MyComponent
-
-```
-@Before
-fun setUp() {
-    // Create an instance of MyComponent with a mock ApiService
-    val mockApiService = MockApiService()
-    myComponent = MyComponent(mockApiService)
-}
-
-@Test
-fun testFetchUser() {
-    // Test the fetchUser method using the mock ApiService
-    val user = runBlocking { myComponent.fetchUser("123") }
-    assertEquals(user.id, "123")
-    assertEquals(user.name, "Mock User")
-}
-
-```
-
-}
-
-This test class creates an instance of MyComponent with a MockApiService object, and then tests the fetchUser method using the mock object. Because the MockApiService returns a hard-coded User object, you can test the behavior of MyComponent without relying on a real server.
-
-By using mock testing and dependency injection, you can test your Android components in isolation and with greater control over their dependencies. This can help you catch bugs and ensure that your app behaves as expected in a variety of scenarios.
-
 ## Alarm manager , Job scheduler
 
 The AlarmManager is a class in the Android framework that allows you to schedule tasks, or "alarms," to be executed at a specific time or after a specific interval. It can be used to trigger a broadcast receiver, start a service, or execute a PendingIntent at a specific time in the future. These alarms can be scheduled to occur even if the device is in sleep mode.
@@ -1973,163 +2048,6 @@ Data Binding: a library that allows you to bind UI components in your layouts to
 Lifecycle: a library that provides a set of classes and interfaces for managing the lifecycle of your app's components.
 
 By using these components, developers can create more scalable, maintainable, and testable apps with less code. The components are designed to work well together and provide a consistent development experience across different Android versions and device types.
-
-## Work manager
-
-what is workmanager in android?
-
-WorkManager is a part of the Android Jetpack library, it is a library for managing background tasks in Android, specifically for tasks that need to be executed even if the app is closed or the device is rebooted.
-
-WorkManager allows you to schedule and execute deferrable, asynchronous tasks that are guaranteed to run, even if the app is closed or the device is rebooted. It also allows you to chain multiple tasks together, called a "WorkSequence", to create more complex workflows.
-
-WorkManager also allows you to set constraints on when the task should be executed, such as requiring a network connection or waiting until the device is charging. It also provides a way to monitor the status of the task and get the result of the execution.
-
-It is built on top of the JobScheduler, AlarmManager and Firebase JobDispatcher which means that it can schedule tasks on any version of Android, and it will use the best underlying system API depending on the device capabilities, this feature makes it a great alternative to the previous libraries, since it abstracts the underlying implementation and provides a consistent API.
-
-In summary, WorkManager is an Android library that allows you to schedule and execute background tasks in a robust and flexible way. It's a great alternative to schedule background tasks in an app, especially when those tasks need to be executed even if the app is closed or the device is rebooted.
-
-There are several alternatives to WorkManager for scheduling background tasks in Android:
-
-AlarmManager: The AlarmManager is a built-in service in Android that allows you to schedule tasks to be executed at a specific time or after a specific interval. However, AlarmManager does not provide an easy way to chain multiple tasks together and does not handle constraints or guarantee that the task will be executed if the app is closed or the device is rebooted.
-
-JobScheduler: The JobScheduler is a built-in service in Android that allows you to schedule background tasks to be executed under certain conditions, such as when the device is connected to a certain type of network or when the battery level is high. However, JobScheduler does not provide an easy way to chain multiple tasks together and also it's not guaranteed to run on all versions of android.
-
-Firebase JobDispatcher: Firebase JobDispatcher is a third-party library that can be used to schedule background tasks on Android. It is an open-source library that provides a simple API for scheduling jobs and works on Android 4.0 (API level 14) and higher. However, it does not provide an easy way to chain multiple tasks together and also it's not guaranteed to run on all versions of android.
-
-Coroutines: Coroutines are a new way of managing concurrency in Android, introduced in Kotlin. They can be used to schedule background tasks and handle the results of those tasks. However, Coroutines are not built for handling tasks that need to be executed even if the app is closed or the device is rebooted.
-
-RxJava: RxJava is a library that allows you to handle asynchronous tasks and chain multiple tasks together, similar to WorkManager. However, it does not provide a way to handle constraints or guarantee that the task will be executed if the app is closed or the device is rebooted.
-
-In summary, while WorkManager provides a robust and flexible way to schedule background tasks, there are other libraries and techniques available that can be used depending on the specific needs of the project.
-
-WorkManager and AlarmManager are both used for scheduling background tasks in Android, but they have some key differences:
-
-Guaranteed execution: WorkManager guarantees that the background task will be executed, even if the app is closed or the device is rebooted, while AlarmManager does not guarantee that the task will be executed if the device is rebooted or the app is closed.
-
-Constraints: WorkManager allows you to set constraints on when the task should be executed, such as requiring a network connection or waiting until the device is charging, while AlarmManager does not have this functionality.
-
-Chaining Tasks: WorkManager allows you to chain multiple tasks together, called a "WorkSequence", to create more complex workflows, while AlarmManager does not provide an easy way to chain multiple tasks together.
-
-Abstraction: WorkManager abstracts the underlying implementation and provides a consistent API, it uses the JobScheduler, AlarmManager and Firebase JobDispatcher depending on the device capabilities, while AlarmManager is a built-in service in Android.
-
-Results and Data: WorkManager allows you to pass input and receive output data from the task, it also provide a way to monitor the status of the task and get the result of the execution, AlarmManager does not provide this functionality.
-
-In summary, WorkManager provides a more robust and flexible way to schedule background tasks, it's a great alternative to schedule background tasks in an app, especially when those tasks need to be executed even if the app is closed or the device is rebooted. However, it's important to note that AlarmManager is more lightweight and suitable for simple alarm use cases.
-
-## Singleton
-
-In Kotlin, a thread-safe singleton can be implemented using the object keyword, which creates a class with a single instance that is lazily initialized and can be accessed from anywhere in the code.
-
-To make the singleton thread-safe, you can use the double-checked locking pattern. Here's an example implementation:
-
-object MySingleton {
-@Volatile private var instance: MySingleton? = null
-
-```
-fun getInstance(): MySingleton {
-    val currentInstance = instance
-    if (currentInstance != null) {
-        return currentInstance
-    }
-
-    synchronized(this) {
-        var newInstance = instance
-        if (newInstance == null) {
-            newInstance = MySingleton()
-            instance = newInstance
-        }
-        return newInstance
-    }
-}
-
-```
-
-}
-
-In this implementation, the instance variable is marked as @Volatile, which ensures that any changes to it are immediately visible to all threads. The getInstance() method first checks if an instance has already been created and returns it if it exists. If not, it acquires a lock on the MySingleton object and checks again to ensure that no other threads have created the instance while waiting for the lock. If the instance still doesn't exist, it creates a new one and assigns it to the instance variable.
-
-Note that while this implementation is thread-safe, it can still suffer from performance issues due to the overhead of acquiring and releasing the lock. An alternative approach is to use a lazy-initialized property with a thread-safe initializer function:
-
-object MySingleton {
-val instance by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) { MySingleton() }
-}
-
-In this implementation, the instance property is lazily initialized and uses the SYNCHRONIZED mode to ensure that the initialization is thread-safe. This approach can be more efficient than the double-checked locking pattern, as the lock is only acquired once during the initialization process.
-
-In this example, the Singleton class has a private constructor, which prevents other classes from instantiating it directly. Instead, other classes must use the getInstance() method to access the singleton instance. This method uses lazy initialization to create the instance object only if it hasn't been created already. This ensures that only one instance of the Singleton class exists at any given time.
-
-public class Singleton {
-private static Singleton instance;
-
-```
-private Singleton() {
-    // private constructor to prevent instantiation
-}
-
-public static Singleton getInstance() {
-    if (instance == null) {
-        instance = new Singleton();
-    }
-    return instance;
-}
-
-```
-
-}
-
-There are several ways to create a singleton class in Kotlin. Here are a few examples:
-
-Using a companion object: In this approach, the singleton class has a companion object with a getInstance() method that returns the singleton instance. The instance object is created using lazy initialization to ensure that it is only created when it is needed. Here is an example of this approach:
-
-//Kotlin
-class MySingleton private constructor() {
-companion object {
-private val instance = MySingleton()
-
-```
-        fun getInstance(): MySingleton {
-            return instance
-        }
-    }
-
-    fun doSomething() {
-        // implementation
-    }
-}
-
-```
-
-Using the object keyword: In this approach, the singleton class is declared using the object keyword. This creates a singleton object that is initialized when the class is loaded. Here is an example of this approach:
-
-object Singleton {
-// Singleton class implementation goes here
-}
-
-Using the by lazy delegate: In this approach, the instance object is created using the by lazy delegate, which ensures that the object is only created when it is first accessed. Here is an example of this approach:
-
-class Singleton private constructor() {
-companion object {
-private val instance: Singleton by lazy {
-Singleton()
-}
-
-```
-    fun getInstance(): Singleton {
-        return instance
-    }
-}
-
-```
-
-}
-
-A static variable or method can be called without creating an instance of the class, while a singleton requires an instance to be created.
-
-## RxJava
-
-RxJava is a Java-based library that provides a set of reactive programming types and operators that you can use to build responsive, scalable, and concurrent applications. It allows you to compose asynchronous and event-based programs by using observable sequences, and it can be used to build fast and responsive applications that can handle a high volume of concurrency.
-LiveData is a lifecycle-aware data holder that allows you to observe changes to data across multiple components of your app, including activities, fragments, and services. It is designed to hold data that is used in UI and that can be observed by UI components. LiveData is lifecycle-aware, meaning it respects the lifecycle of other app components, such as activities and fragments. This allows it to automatically stop and start observing data changes when the lifecycle state of the observing component changes.
-In summary, RxJava is a reactive programming library that allows you to build asynchronous and event-based programs, while LiveData is a data holder that is lifecycle-aware and can be observed by UI components. They can be used together, but they serve different purposes and are not directly related to each other.
 
 ## Serializable and Parcelable
 
@@ -2359,203 +2277,298 @@ Fix the memory leak by identifying the cause and making the necessary code chang
 
 By following these steps, you can effectively use the Android Profiler to identify memory leaks in your app and take the necessary steps to fix them. It's important to note that memory leaks can have a significant impact on the performance and stability of your app, so it's important to regularly use the Profiler to monitor and identify any potential issues.
 
-## Operators
+## Work manager
 
-`map` and `filter` are both methods used in functional programming to transform collections of data. Here's a brief explanation of each:
+what is workmanager in android?
 
-`map`:
+WorkManager is a part of the Android Jetpack library, it is a library for managing background tasks in Android, specifically for tasks that need to be executed even if the app is closed or the device is rebooted.
 
-- Transforms each element of a collection based on a given function
-- Returns a new collection with the transformed elements
-- The number of elements in the new collection is the same as the original collection
+WorkManager allows you to schedule and execute deferrable, asynchronous tasks that are guaranteed to run, even if the app is closed or the device is rebooted. It also allows you to chain multiple tasks together, called a "WorkSequence", to create more complex workflows.
 
-Example:
+WorkManager also allows you to set constraints on when the task should be executed, such as requiring a network connection or waiting until the device is charging. It also provides a way to monitor the status of the task and get the result of the execution.
 
-```
-List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+It is built on top of the JobScheduler, AlarmManager and Firebase JobDispatcher which means that it can schedule tasks on any version of Android, and it will use the best underlying system API depending on the device capabilities, this feature makes it a great alternative to the previous libraries, since it abstracts the underlying implementation and provides a consistent API.
 
-List<Integer> doubledNumbers = numbers.stream()
-                                      .map(number -> number * 2)
-                                      .collect(Collectors.toList());
+In summary, WorkManager is an Android library that allows you to schedule and execute background tasks in a robust and flexible way. It's a great alternative to schedule background tasks in an app, especially when those tasks need to be executed even if the app is closed or the device is rebooted.
 
-```
+There are several alternatives to WorkManager for scheduling background tasks in Android:
 
-In this example, we start with a list of integers and use the `map` method to double each number. The resulting `doubledNumbers` list contains the same number of elements as the original `numbers` list, but each element has been transformed.
+AlarmManager: The AlarmManager is a built-in service in Android that allows you to schedule tasks to be executed at a specific time or after a specific interval. However, AlarmManager does not provide an easy way to chain multiple tasks together and does not handle constraints or guarantee that the task will be executed if the app is closed or the device is rebooted.
 
-`filter`:
+JobScheduler: The JobScheduler is a built-in service in Android that allows you to schedule background tasks to be executed under certain conditions, such as when the device is connected to a certain type of network or when the battery level is high. However, JobScheduler does not provide an easy way to chain multiple tasks together and also it's not guaranteed to run on all versions of android.
 
-- Selects only the elements of a collection that satisfy a given condition
-- Returns a new collection with the selected elements
-- The number of elements in the new collection can be less than or equal to the number of elements in the original collection
+Firebase JobDispatcher: Firebase JobDispatcher is a third-party library that can be used to schedule background tasks on Android. It is an open-source library that provides a simple API for scheduling jobs and works on Android 4.0 (API level 14) and higher. However, it does not provide an easy way to chain multiple tasks together and also it's not guaranteed to run on all versions of android.
 
-Example:
+Coroutines: Coroutines are a new way of managing concurrency in Android, introduced in Kotlin. They can be used to schedule background tasks and handle the results of those tasks. However, Coroutines are not built for handling tasks that need to be executed even if the app is closed or the device is rebooted.
 
-```
-List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+RxJava: RxJava is a library that allows you to handle asynchronous tasks and chain multiple tasks together, similar to WorkManager. However, it does not provide a way to handle constraints or guarantee that the task will be executed if the app is closed or the device is rebooted.
 
-List<Integer> evenNumbers = numbers.stream()
-                                    .filter(number -> number % 2 == 0)
-                                    .collect(Collectors.toList());
+In summary, while WorkManager provides a robust and flexible way to schedule background tasks, there are other libraries and techniques available that can be used depending on the specific needs of the project.
 
-```
+WorkManager and AlarmManager are both used for scheduling background tasks in Android, but they have some key differences:
 
-In this example, we start with a list of integers and use the `filter` method to keep only the even numbers. The resulting `evenNumbers` list contains only the even elements from the original `numbers` list.
+Guaranteed execution: WorkManager guarantees that the background task will be executed, even if the app is closed or the device is rebooted, while AlarmManager does not guarantee that the task will be executed if the device is rebooted or the app is closed.
 
-In summary, `map` is used to transform each element of a collection, while `filter` is used to select only certain elements from a collection based on a given condition. Both `map` and `filter` are powerful tools in functional programming that can help you write more expressive, efficient, and maintainable code.
+Constraints: WorkManager allows you to set constraints on when the task should be executed, such as requiring a network connection or waiting until the device is charging, while AlarmManager does not have this functionality.
 
-Yes, there are several other functions used for transforming data in functional programming. Here are a few examples:
+Chaining Tasks: WorkManager allows you to chain multiple tasks together, called a "WorkSequence", to create more complex workflows, while AlarmManager does not provide an easy way to chain multiple tasks together.
 
-1. `reduce`:
-- Combines the elements of a collection into a single value
-- The result of the function is passed as an accumulator to the next element in the collection
+Abstraction: WorkManager abstracts the underlying implementation and provides a consistent API, it uses the JobScheduler, AlarmManager and Firebase JobDispatcher depending on the device capabilities, while AlarmManager is a built-in service in Android.
 
-Example:
+Results and Data: WorkManager allows you to pass input and receive output data from the task, it also provide a way to monitor the status of the task and get the result of the execution, AlarmManager does not provide this functionality.
 
-```
-List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+In summary, WorkManager provides a more robust and flexible way to schedule background tasks, it's a great alternative to schedule background tasks in an app, especially when those tasks need to be executed even if the app is closed or the device is rebooted. However, it's important to note that AlarmManager is more lightweight and suitable for simple alarm use cases.
 
-int sum = numbers.stream()
-                 .reduce(0, (accumulator, number) -> accumulator + number);
 
-```
+# CI / CD
 
-In this example, we use the `reduce` method to sum the elements of the `numbers` list. We start with an initial value of `0` and then add each element to the accumulator to get the final sum.
+CI/CD:
+We have implemented CI/CD using Jenkins. There is a jenkins config file where we need to mention what happens during each stage of the pipeline. We also need to set up a dockerfile to configure the docker container. We are using sonarcube and test coverage reports as stages in the pipeline.
 
-1. `flatMap`:
-- Transforms each element of a collection into a stream of elements
-- Flattens the resulting stream of streams into a single stream
+CI/CD stands for Continuous Integration and Continuous Delivery/Deployment. In the context of Android app development, CI/CD refers to a set of practices and tools that automate the process of building, testing, and deploying Android apps.
 
-Example:
+Continuous Integration (CI) is the practice of automatically building and testing an application whenever changes are made to the codebase. The goal of CI is to catch any issues early in the development cycle, before they have a chance to cause larger problems down the line.
 
-```
-List<List<Integer>> listOfLists = Arrays.asList(
-    Arrays.asList(1, 2),
-    Arrays.asList(3, 4),
-    Arrays.asList(5, 6)
-);
+Continuous Delivery (CD) is the practice of automatically deploying an application to a staging environment after it has been built and tested. The goal of CD is to ensure that the application is ready for release as soon as it has passed all the necessary tests.
 
-List<Integer> flatList = listOfLists.stream()
-                                     .flatMap(list -> list.stream())
-                                     .collect(Collectors.toList());
+Continuous Deployment (CD) takes things a step further by automatically deploying the application to production after it has been built and tested.
 
-```
+Implementing CI/CD in an Android app development workflow involves using a combination of tools and processes to automate various tasks, such as building the app, running tests, and deploying to various environments.
 
-In this example, we start with a list of lists and use the `flatMap` method to flatten it into a single list. Each sub-list is transformed into a stream of integers, and then the resulting streams are flattened into a single stream of integers.
+Here are some steps to implement CI/CD for an Android app:
 
-1. `distinct`:
-- Removes duplicate elements from a collection
+Use a version control system, such as Git, to manage your codebase.
 
-Example:
+Use a build automation tool, such as Gradle, to automate the process of building your app.
 
-```
-List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 2, 4);
+Use a testing framework, such as JUnit, to automate the process of testing your app.
 
-List<Integer> uniqueNumbers = numbers.stream()
-                                      .distinct()
-                                      .collect(Collectors.toList());
+Use a continuous integration tool, such as Jenkins or CircleCI, to automatically build and test your app whenever changes are made to the codebase.
 
-```
+Use a continuous delivery/deployment tool, such as Fastlane or Google Play Console, to automatically deploy your app to various environments, such as a staging environment or production environment.
 
-In this example, we start with a list of integers that contains duplicates. We use the `distinct` method to remove the duplicates and get a list of unique numbers.
+Monitor your app using tools such as Crashlytics or Firebase Analytics, to catch and fix issues as they arise.
 
-These are just a few examples of the many transform functions available in functional programming. By combining these functions in different ways, you can build powerful and expressive programs that are easy to reason about and maintain.
+By implementing CI/CD in your Android app development workflow, you can reduce the amount of time and effort required to build, test, and deploy your app, while also improving the overall quality of your app.
 
-You're right, I apologize for omitting `switchMap` in my previous response. `switchMap` is a transform function commonly used in reactive programming, particularly with RxJava and Kotlin Flow. Here's a brief explanation of what it does:
+[https://medium.com/velos/setting-up-firebase-app-distribution-with-automatic-builds-from-jenkins-2587028e2a3a](https://medium.com/velos/setting-up-firebase-app-distribution-with-automatic-builds-from-jenkins-2587028e2a3a)
 
-`switchMap`:
+# Dependency Injection
 
-- Maps each element of a stream to a new stream, and then switches to emitting the items from the most recently mapped stream
-- Can be used to cancel previous emissions and start a new stream when a new event occurs
+Benefits of dependency injection:
+Decouple modules (provide dependency from outside)
+Helps with unit testing by mocking dependencies.
+Improves code reusability
+Reduce boilerplate code in application class since all the work to initialize dependencies is handled by injector component
 
-Example:
+Hilt vs Dagger:
+Hilt can be considered as an extension of dagger. It helps us reduce the boilerplate code that's associated with dagger by generating the setup code and components by itself thus helping us ease the integration. Hilt is designed specifically for android unlike dagger which is a Java DI framework
 
-```
-val searchQueryFlow: Flow<String> = searchQueryEditText.textChanges()
-    .debounce(500)
-    .map { it.toString() }
-    .distinctUntilChanged()
+Example injection a viewmodel using hilt is as easy as adding a few annotations.
 
-val searchResultsFlow: Flow<List<SearchResult>> = searchQueryFlow
-    .flatMapLatest { query ->
-        repository.search(query)
-    }
+@HiltAndroidApp
+Application class
 
-```
+@HiltViewmodel
+Viewmodel class
 
-In this example, we have a search box (`searchQueryEditText`) that emits a stream of text changes. We use `debounce` to only emit events when the user stops typing for 500 milliseconds, and then map each text change to a string. We also use `distinctUntilChanged` to only emit a new query when the text has actually changed.
+@HiltEntryPoint
+Activity Class
 
-Next, we use `flatMapLatest` to map each search query to a new stream of search results from the repository. The `flatMapLatest` operator will cancel any previous search requests that are still in progress and only emit the results of the most recent search query.
+In dependency injection (DI), an injector is a mechanism or framework that creates and manages the dependencies of an object and injects them into the object at runtime. The injector is responsible for resolving dependencies, creating the necessary objects, and providing them to the requesting object.
 
-So, `switchMap` is a powerful transform function that can be used to dynamically switch between streams and cancel previous emissions when new events occur. It's especially useful in scenarios where you need to perform expensive operations, such as network requests or database queries, in response to user input.
+The injector typically works by first analyzing the dependencies of the object being requested, and then recursively analyzing the dependencies of those dependencies until all dependencies have been resolved. The injector then creates the necessary objects and injects them into the requesting object, often through a constructor or a setter method.
 
-There are a few other transform functions that are commonly used in reactive programming. Here's a brief explanation of each:
+DI injectors can be implemented in different ways, depending on the programming language, framework, or library being used. Some DI frameworks use reflection or metadata to analyze and resolve dependencies, while others use configuration files or annotations.
 
-1. `concatMap`:
-- Maps each element of a stream to a new stream, and then concatenates the emissions from each mapped stream in the order they were emitted
-- Useful when you need to maintain the order of emissions, but some emissions may take longer to complete than others
+An important feature of an injector is the ability to manage the lifetime of the objects it creates. Depending on the requirements of the application, the injector may create a new object for each request, reuse an existing object if available, or maintain a pool of objects to be reused as needed.
 
-Example:
+Overall, an injector is a key component of dependency injection, responsible for creating and managing the dependencies of an object and injecting them at runtime. It provides a powerful way to decouple objects from their dependencies and make applications more modular, maintainable, and testable.
 
-```
-val clicksFlow: Flow<Int> = buttonClicks.asFlow()
+# Testing
 
-val resultsFlow: Flow<String> = clicksFlow
-    .concatMap { clickCount ->
-        repository.fetchResults(clickCount)
-    }
+Local Unit test: JUnit, Mockito
+
+[]()
+
+Instrumentation tests(a kind of functional tests): Espresso, Robolectric, Robotium
+
+unit test vs instrumentation test in android
+Unit tests in Android are tests that are written to test individual units of code, such as a single method or class. These tests are typically run on a local development machine and do not require an Android device or emulator to run.
+
+Instrumentation tests, on the other hand, are tests that are run on an Android device or emulator. These tests have access to the Android framework and can test the application's user interface and interactions with the system. They are typically slower to run and more complex to write than unit tests.
+
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+
+public class ExampleUnitTest {
+@Test
+public void addition_isCorrect() {
+assertEquals(4, 2 + 2);
+}
+}
+
+This test case uses the assertEquals method to verify that the result of the expression 2 + 2 is equal to 4. The @Test annotation indicates that this is a test method that should be executed by the test runner.
+
+To run this test, you'll need to create a test class in your Android project and add this code to the class. You can then run the tests using a test runner, such as the JUnit test runner provided by Android Studio. If the test passes, you'll see a green checkmark next to the test method. If the test fails, you'll see a red X and an error message indicating what went wrong.
+
+import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+public class EmailValidatorTest {
 
 ```
+@Test
+public void emailValidator_CorrectEmailSimple_ReturnsTrue() {
+    assertTrue(EmailValidator.isValidEmail("name@email.com"));
+}
 
-In this example, we have a button that emits a stream of click events. We use `concatMap` to map each click event to a new stream of results from the repository, and then concatenate the emissions from each stream in the order they were emitted. This ensures that the results for each click event are emitted in the correct order, even if some requests take longer than others.
+@Test
+public void emailValidator_CorrectEmailSubDomain_ReturnsTrue() {
+    assertTrue(EmailValidator.isValidEmail("name@email.co.uk"));
+}
 
-1. `buffer`:
-- Collects a certain number of emissions into a buffer, and then emits the buffer as a single element
-- Useful when you need to batch emissions to reduce overhead or optimize performance
+@Test
+public void emailValidator_InvalidEmailNoTld_ReturnsFalse() {
+    assertFalse(EmailValidator.isValidEmail("name@email"));
+}
 
-Example:
+@Test
+public void emailValidator_InvalidEmailDoubleDot_ReturnsFalse() {
+    assertFalse(EmailValidator.isValidEmail("name@email..com"));
+}
 
-```
-val clicksFlow: Flow<Int> = buttonClicks.asFlow()
-
-val bufferFlow: Flow<List<Int>> = clicksFlow
-    .buffer(10)
-
-```
-
-In this example, we have a button that emits a stream of click events. We use `buffer` to collect 10 click events into a buffer, and then emit the buffer as a single list of integers. This reduces the number of emissions and can help optimize performance in some scenarios.
-
-1. `scan`:
-- Applies a function to each element of a stream, and emits the intermediate results as they're generated
-- Useful for calculating running totals, accumulating values, or generating a sequence of intermediate results
-
-Example:
-
-```
-val numbersFlow: Flow<Int> = numbers.asFlow()
-
-val sumFlow: Flow<Int> = numbersFlow
-    .scan(0) { accumulator, number ->
-        accumulator + number
-    }
+@Test
+public void emailValidator_InvalidEmailNoUsername_ReturnsFalse() {
+    assertFalse(EmailValidator.isValidEmail("@email.com"));
+}
 
 ```
 
-In this example, we have a stream of numbers. We use `scan` to calculate the running sum of the numbers, by adding each number to the accumulator and emitting the intermediate result as it's generated.
+}
 
-These are just a few more examples of the many transform functions available in reactive programming. By combining these functions in different ways, you can build powerful and expressive programs that are highly responsive and resilient to errors.
+In JUnit, the assert keywords are used to perform assertions or verifications in your test cases. Assertions allow you to verify that the code under test produces the expected results. If an assertion fails, the test case will fail and an error message will be reported by the test runner.
+
+Here are some of the most commonly used assert keywords in JUnit:
+
+assertEquals(expected, actual): Verifies that the expected and actual values are equal.
+assertTrue(condition): Verifies that the condition is true.
+assertFalse(condition): Verifies that the condition is false.
+assertNull(object): Verifies that the object is null.
+assertNotNull(object): Verifies that the object is not null.
+assertArrayEquals(expectedArray, actualArray): Verifies that two arrays are equal.
+You can use these assertions in your test cases to verify the behavior of your code and ensure that it works correctly. By using assertions, you can catch bugs and defects early in the development process and improve the overall quality of your code.
+
+## Mock test
+
+Mock testing is a technique used in software development to isolate and test individual components of a system by replacing their dependencies with "mock" objects that mimic the behavior of the real dependencies. This is useful in Android development because it allows you to test code that relies on complex or external dependencies in isolation, without requiring access to those dependencies.
+
+One approach to implementing mock testing in Android is through the use of dependency injection (DI), a design pattern that provides a way to manage the creation and lifetime of objects in a system. There are several ways to implement DI in Android, including using a framework like Dagger or Koin. Here are some steps to follow to do mock testing in Android using dependency injection:
+
+Identify the dependencies of the component you want to test: Before you can begin mock testing a component, you need to identify which dependencies it relies on. These might include APIs, databases, external services, or other components in your app.
+
+Create an interface for the dependency: To make the dependency more testable, create an interface that defines the methods or properties that the component uses to interact with the dependency.
+
+Create a mock implementation of the dependency: Next, create a mock implementation of the dependency that implements the interface you created in step 2. This mock implementation should mimic the behavior of the real dependency as closely as possible, but without relying on any external resources.
+
+Inject the dependency into the component: Modify the component to use the interface you created in step 2 instead of directly using the real dependency. Then, use a DI framework to inject the real or mock dependency into the component.
+
+Write tests for the component: With the mock dependency in place, you can now write tests for the component that exercise its behavior in isolation. Use the mock implementation of the dependency to simulate different scenarios, and verify that the component behaves as expected.
+
+By using dependency injection and mock objects, you can test your Android components more thoroughly and with greater confidence that they will work as expected in production. This can help you catch bugs earlier in the development process and reduce the risk of introducing regressions when making changes to your code.
+
+here is an example of how you can use mock testing in Android with code:
+
+Let's say you have an Android app that retrieves data from a remote server using the Retrofit library. You want to test a component of your app that uses this library, but you don't want to rely on a real server during testing. To do this, you can use mock testing and dependency injection to substitute a mock version of the Retrofit library during testing.
+
+First, you need to create an interface that defines the methods you want to use from the Retrofit library. For example:
+interface ApiService {
+@GET("/users/{userId}")
+suspend fun getUserById(@Path("userId") userId: String): User
+}
+
+This interface defines a single method getUserById that retrieves a User object from the server based on an ID.
+
+Next, you can create a mock implementation of this interface using a mocking library such as Mockito. For example:
+
+class MockApiService : ApiService {
+override suspend fun getUserById(userId: String): User {
+// Return a mock User object for testing purposes
+return User(userId, "Mock User")
+}
+}
+
+This mock implementation simply returns a hard-coded User object instead of making a network request to the server.
+
+Now you can modify the component you want to test to use this interface instead of the real Retrofit library. For example:
+
+class MyComponent(private val apiService: ApiService) {
+suspend fun fetchUser(userId: String): User {
+// Use the ApiService interface to retrieve the user
+return apiService.getUserById(userId)
+}
+}
+
+This component takes an ApiService object as a constructor parameter and uses it to retrieve a user based on an ID.
+
+Finally, in your test class, you can create an instance of the MyComponent class using the MockApiService mock implementation. For example:
+
+class MyComponentTest {
+private lateinit var myComponent: MyComponent
+
+```
+@Before
+fun setUp() {
+    // Create an instance of MyComponent with a mock ApiService
+    val mockApiService = MockApiService()
+    myComponent = MyComponent(mockApiService)
+}
+
+@Test
+fun testFetchUser() {
+    // Test the fetchUser method using the mock ApiService
+    val user = runBlocking { myComponent.fetchUser("123") }
+    assertEquals(user.id, "123")
+    assertEquals(user.name, "Mock User")
+}
+
+```
+
+}
+
+This test class creates an instance of MyComponent with a MockApiService object, and then tests the fetchUser method using the mock object. Because the MockApiService returns a hard-coded User object, you can test the behavior of MyComponent without relying on a real server.
+
+By using mock testing and dependency injection, you can test your Android components in isolation and with greater control over their dependencies. This can help you catch bugs and ensure that your app behaves as expected in a variety of scenarios.
+
+
+
+
+
+# RxJava
+
+RxJava is a Java-based library that provides a set of reactive programming types and operators that you can use to build responsive, scalable, and concurrent applications. It allows you to compose asynchronous and event-based programs by using observable sequences, and it can be used to build fast and responsive applications that can handle a high volume of concurrency.
+LiveData is a lifecycle-aware data holder that allows you to observe changes to data across multiple components of your app, including activities, fragments, and services. It is designed to hold data that is used in UI and that can be observed by UI components. LiveData is lifecycle-aware, meaning it respects the lifecycle of other app components, such as activities and fragments. This allows it to automatically stop and start observing data changes when the lifecycle state of the observing component changes.
+In summary, RxJava is a reactive programming library that allows you to build asynchronous and event-based programs, while LiveData is a data holder that is lifecycle-aware and can be observed by UI components. They can be used together, but they serve different purposes and are not directly related to each other.
+
+
+
 
 # DSA 
-[https://leetcode.com/problems/house-robber/](https://leetcode.com/problems/house-robber/)  ✅
+[https://leetcode.com/problems/house-robber/](https://leetcode.com/problems/house-robber/)  
 [https://leetcode.com/problems/reverse-linked-list/](https://leetcode.com/problems/reverse-linked-list/)  
-[https://leetcode.com/problems/valid-palindrome/](https://leetcode.com/problems/valid-palindrome/) ✅
+[https://leetcode.com/problems/valid-palindrome/](https://leetcode.com/problems/valid-palindrome/) 
 [https://leetcode.com/problemset/all/?difficulty=EASY&page=1](https://leetcode.com/problemset/all/?difficulty=EASY&page=1) [https://leetcode.com/problemset/all/?difficulty=MEDIUM&page=1](https://leetcode.com/problemset/all/?difficulty=MEDIUM&page=1) 
 [https://leetcode.com/problems/number-of-islands](https://leetcode.com/problems/number-of-islands/)
 
 Reverse part of linked list
-max sum subarray ✅
-Swap 2 numbers without using a third variable ✅
-Prime number✅, reverse string✅, reverse number✅
-count digits✅, fibonacci, maxprofit
+fizzbuzz
+max sum subarray 
+Swap 2 numbers without using a third variable 
+Prime number, reverse string, reverse number
+count digits, fibonacci, maxprofit
 
 write a program to find the nth largest number in an array of integers
 Arrange 1 's and 0's in a given array
